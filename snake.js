@@ -111,20 +111,7 @@ $(document).ready(function() {
                 game.interval = null;
                 return;
             }
-            /*var currTime = new Date().getTime();
-             var timeToCall = Math.max(0, (currTime - lastTime));
-
-             if( timeToCall < 90 ){
-             //return;
-             }else{
-
-             lastTime = currTime;*/
-            /*
-             var id = window.setTimeout(function() {
-             callback(currTime + timeToCall);
-             }, timeToCall);
-             lastTime = currTime + timeToCall;
-             */
+            
             if (game.food == null) {
                 game.create_food();
             } else if (game.check_eat_food()) {
@@ -147,8 +134,6 @@ $(document).ready(function() {
                 return;
             }
 
-            /*}
-             requestAnimationFrame( game.tick );*/
         },
         draw : function() {
 
@@ -251,20 +236,10 @@ $(document).ready(function() {
     var context = canvas.getContext("2d");
     var width = $("#canvas").width();
     var height = $("#canvas").height();
-    context.fillStyle = "black";
-    context.strokeStyle = "black";
-    //context.fillText("score_text", 50, 50);
-    //game.Initialize();
+        
     game.setup();
     game.pause();
-    //game.draw_score();
-    //game.draw_game_over();
-    //lastTime = new Date().getTime();
-    //game.tick();
-    //game.interval = setInterval(game.tick, 100);
-    //console.log( game.width );
-    //console.log( game.height );
-    //console.log( snake.positions.length );
+    
     $(document).keydown(function(event) {
         switch (event.keyCode) {
             case 37:
