@@ -60,6 +60,9 @@ $(document).ready(function() {
         clear_border : true,
         sounds : true,
         paused : false,
+        level : 0,
+        level_speed : [ 200, 150 ,137, 125, 112, 100, 82, 75, 62, 50, 37, 25  ],
+        current_seed : 0,
         setup : function() {
             this.width = Math.floor(width / this.box_width) - 1;
             this.height = Math.floor((height - 30 ) / this.box_height) - 1;
@@ -73,7 +76,9 @@ $(document).ready(function() {
             snake.eat();
             snake.eat();
             game.score = 0;
-            game.interval = setInterval(game.tick, 125);
+            game.level = 0;
+            game.current_seed = game.level_speed[ game.level ];
+            game.interval = setInterval(game.tick, game.current_seed);
             game.draw_score();
         },
         Initialize : function() {
@@ -97,9 +102,18 @@ $(document).ready(function() {
         resume : function() {
             game.paused = false;
             if (!game.interval) {
-                game.interval = setInterval(game.tick, 125);
+                game.interval = setInterval(game.tick, game.current_seed);
             }
             game.draw_score();
+        },
+        level_up : function(){
+        	if (game.interval) {
+        		clearInterval(game.interval);
+                game.interval = null;
+			}
+			//game.level++;
+			game.current_seed = game.level_speed[ ++game.level ];
+        	game.interval = setInterval(game.tick, game.current_seed);
         },
         tick : function() {
             if (game.game_over) {
@@ -120,6 +134,9 @@ $(document).ready(function() {
                 game.score++;
                 game.draw_score();
                 AudioPlayer.consume();
+                if( ! ( game.score % 3 ) ){
+                	game.level_up();
+                }
             }
             snake.move();
             game.draw();
@@ -180,21 +197,20 @@ $(document).ready(function() {
         draw_score : function() {
             context.clearRect(0, (game.height + 2  ) * this.box_height, width, height - (game.height + 2  ) * this.box_height);
             context.fillStyle = theme.score;
-            context.fillText("Score : " + this.score, this.box_width, (game.height + 3 ) * this.box_height);
+            context.fillText("Score : " + this.score + " Level : " + this.level, this.box_width, (game.height + 3 ) * this.box_height);
         },
         draw_game_over : function() {
             context.fillStyle = theme.score;
-            context.fillText("Game over press Enter to play", this.box_width + 100, (game.height + 3 ) * this.box_height);
+            context.fillText("Game over press Enter to play", this.box_width + 150, (game.height + 3 ) * this.box_height);
         },
         draw_paused : function() {
             context.fillStyle = theme.score;
-            context.fillText("Game paused press p to play", this.box_width + 100, (game.height + 3 ) * this.box_height);
+            context.fillText("Game paused press p to play", this.box_width + 150, (game.height + 3 ) * this.box_height);
         },
         check_snake_collusion : function() {
             for (var i = 1; i < snake.positions.length; i++) {
                 if (snake.positions[ i ][0] == snake.positions[ 0 ][0] && snake.positions[ i ][1] == snake.positions[ 0 ][1]) {
-                    console.log(snake.positions);
-                    return true;
+	                return true;
                 }
             }
             return false;
