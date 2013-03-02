@@ -107,11 +107,13 @@ $(document).ready(function() {
             game.draw_score();
         },
         level_up : function(){
+        	if( game.level+1 >= game.level_speed.length ){
+        		return;
+        	}
         	if (game.interval) {
         		clearInterval(game.interval);
                 game.interval = null;
 			}
-			//game.level++;
 			game.current_seed = game.level_speed[ ++game.level ];
         	game.interval = setInterval(game.tick, game.current_seed);
         },
