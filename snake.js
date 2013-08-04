@@ -192,8 +192,8 @@ $(document).ready(function() {
             // Draw food
             if (game.food) {
                 //context.fillStyle = theme.food;
-                context.drawImage(Quontest, this.box_width * game.food[0], this.box_height * game.food[1], this.box_width, this.box_height);
-                //context.fillRect(this.box_width * game.food[0], this.box_height * game.food[1], this.box_width, this.box_height);
+                //context.drawImage(Quontest, this.box_width * game.food[0], this.box_height * game.food[1], this.box_width, this.box_height);
+                context.fillRect(this.box_width * game.food[0], this.box_height * game.food[1], this.box_width, this.box_height);
             }
         },
         draw_score : function() {
