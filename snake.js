@@ -36,11 +36,7 @@ $(document).ready(function() {
         positions : [],
         move : function() {
             var head = [this.positions[0][0] + this.direction[0], this.positions[0][1] + this.direction[1]];
-            //
-            //this.positions.unshift(head);
-            //this.positions.shift();
-            //console.log( snake.direction == directions.up );
-            var tail = this.positions.pop();
+            this.positions.pop();
             this.positions.unshift(head);
         },
         eat : function() {
@@ -68,8 +64,6 @@ $(document).ready(function() {
             this.height = Math.floor((height - 30 ) / this.box_height) - 1;
             this.game_over = false;
             this.clear_border = true;
-            //snake.positions = [];
-            //snake.positions.push(
             snake.direction = directions.up;
             snake.positions = [[Math.floor(Math.random() * (this.width - 1 )) + 1, Math.floor(Math.random() * (this.height - this.height / 2 ) + this.height / 2)]];
             snake.eat();
@@ -96,8 +90,6 @@ $(document).ready(function() {
         pause : function() {
             game.paused = true;
             game.draw_paused();
-            //clearInterval(game.interval);
-            //game.interval = null;
         },
         resume : function() {
             game.paused = false;
@@ -174,15 +166,11 @@ $(document).ready(function() {
             }
             // Draw snake
             context.fillStyle = theme.snake_head;
-            //context.fillRect(this.box_width * snake.positions[0][0], this.box_height * snake.positions[0][1], this.box_width, this.box_height);
             context.fillRect(this.box_width * snake.positions[0][0] + 0.5, this.box_height * snake.positions[0][1] + 0.5, this.box_width - 1, this.box_height - 1);
             //context.font = "15px Arial";
             //context.drawImage(HeadImage,this.box_width * snake.positions[0][0] + 0.5, this.box_height * snake.positions[0][1] +0.5,this.box_width - 1, this.box_height - 1);
-            //context.fillStyle = "#F1F738";
-            //context.fillText("Q", this.box_width * (snake.positions[0][0]+0.12), this.box_height * (snake.positions[0][1]+0.88),25);
             context.fillStyle = theme.snake;
             for ( i = 1; i < snake.positions.length; i++) {
-                //console.log(snake.positions[i]);
                 if (i == snake.positions.length - 1) {
                     context.fillStyle = theme.tail;
                 }
@@ -191,8 +179,6 @@ $(document).ready(function() {
             }
             // Draw food
             if (game.food) {
-                //context.fillStyle = theme.food;
-                //context.drawImage(HeadImage, this.box_width * game.food[0], this.box_height * game.food[1], this.box_width, this.box_height);
                 context.fillRect(this.box_width * game.food[0], this.box_height * game.food[1], this.box_width, this.box_height);
             }
         },
