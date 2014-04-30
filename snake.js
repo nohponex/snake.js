@@ -170,13 +170,14 @@ $(document).ready(function() {
             //context.font = "15px Arial";
             //context.drawImage(HeadImage,this.box_width * snake.positions[0][0] + 0.5, this.box_height * snake.positions[0][1] +0.5,this.box_width - 1, this.box_height - 1);
             context.fillStyle = theme.snake;
-            for ( i = 1; i < snake.positions.length; i++) {
-                if (i == snake.positions.length - 1) {
-                    context.fillStyle = theme.tail;
-                }
+            for ( i = 1; i < snake.positions.length-1; i++) {
                 context.fillRect(this.box_width * snake.positions[i][0] + 0.5, this.box_height * snake.positions[i][1] + 0.5, this.box_width - 1, this.box_height - 1);
-
             }
+            //Draw tail
+            i = snake.positions.length - 1;
+            context.fillStyle = theme.tail;
+            context.fillRect(this.box_width * snake.positions[i][0] + 0.5, this.box_height * snake.positions[i][1] + 0.5, this.box_width - 1, this.box_height - 1);
+            
             // Draw food
             if (game.food) {
                 context.fillRect(this.box_width * game.food[0], this.box_height * game.food[1], this.box_width, this.box_height);
