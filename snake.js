@@ -57,7 +57,7 @@ $(document).ready(function() {
         sounds : true,
         paused : false,
         level : 0,
-        level_speed : [ 200, 150 ,137, 125, 112, 100, 82, 75, 62, 50, 37, 25  ],
+        level_speed : [ 200, 150 ,137, 125, 112, 100, 82, 75, 62, 55, 50, 45, 40 ],
         current_seed : 0,
         setup : function() {
             this.width = Math.floor(width / this.box_width) - 1;
@@ -104,9 +104,9 @@ $(document).ready(function() {
         	}
         	if (game.interval) {
         		clearInterval(game.interval);
-                game.interval = null;
-			}
-			game.current_seed = game.level_speed[ ++game.level ];
+                	game.interval = null;
+		}
+		game.current_seed = game.level_speed[ ++game.level ];
         	game.interval = setInterval(game.tick, game.current_seed);
         },
         tick : function() {
@@ -128,7 +128,7 @@ $(document).ready(function() {
                 game.score++;
                 game.draw_score();
                 AudioPlayer.consume();
-                if( ! ( game.score % 3 ) ){
+                if( !( game.score % ( game.level + 3 ) ) ){
                 	game.level_up();
                 }
             }
