@@ -128,7 +128,7 @@ $(document).ready(function() {
                 game.score++;
                 game.draw_score();
                 AudioPlayer.consume();
-                if( !( game.score % ( game.level + 3 ) ) ){
+                if( game.score > game.level * 4 ){
                 	game.level_up();
                 }
             }
