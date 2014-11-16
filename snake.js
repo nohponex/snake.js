@@ -260,17 +260,15 @@ $(document).ready(function() {
     
     /*default value*/
     var snake_head_image_url = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAnSURBVDhPY1jsuYQqaNQgwmjUIMJo1CDCaNQgwmjUIMJo2BrkuQQAaRCELlBvCsUAAAAASUVORK5CYII=';
-    var food_image_url = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAsSURBVDhPY9z6TJaBGoAJSlMMRg0iDEYNIgxGDSIMRg0iDEYNIgwGm0EMDABsNAHopzTtBAAAAABJRU5ErkJggg==';
+    var food_image_url = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAsSURBVDhPYzyx/zkDNQATlKYYjBpEGIwaRBiMGkQYjBpEGIwaRBgMNoMYGABH7AKeKMIjfgAAAABJRU5ErkJggg==';
     
     //read url parameters
     var params = getUrlVars();
     if( params[ 'head' ] ){
     	snake_head_image_url = params[ 'head' ];
-    	alert( params[ 'head' ] );
     }
     if( params[ 'food' ] ){
     	food_image_url = params[ 'food' ];
-    	alert( params[ 'food' ] );
     }
     
     /* Set snake head from image */
