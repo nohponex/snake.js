@@ -64,10 +64,16 @@ $(document).ready(function() {
         food_image : null,
         
         setup : function( snake_head, food ){
-	    /* Set snake head from image */
-            this.snake_head_image =  snake_head;
-            /* Set food from image */
-            this.food_image =  food;
+        	
+	    if( !this.snake_head_image ){
+	    	/* Set snake head from image */
+            	this.snake_head_image =  snake_head;
+	    }
+            
+            if( !this.food_image ){
+            	/* Set food from image */
+            	this.food_image =  food;
+            }
             
             this.width = Math.floor(width / this.box_width) - 1;
             this.height = Math.floor((height - 30 ) / this.box_height) - 1;
