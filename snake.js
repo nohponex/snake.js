@@ -31,6 +31,7 @@ $(document).ready(function() {
             return [direction[0] * -1, direction[1] * -1];
         }
     };
+    
     var snake = {
         direction : directions.up,
         positions : [],
@@ -59,7 +60,15 @@ $(document).ready(function() {
         level : 0,
         level_speed : [ 200, 150 ,137, 125, 112, 100, 82, 75, 62, 55, 50, 45, 40 ],
         current_seed : 0,
-        setup : function() {
+        snake_head_image : null,
+        food_image : null,
+        
+        setup : function( snake_head, food ){
+	    /* Set snake head from image */
+            this.snake_head_image =  snake_head;
+            /* Set food from image */
+            this.food_image =  food;
+            
             this.width = Math.floor(width / this.box_width) - 1;
             this.height = Math.floor((height - 30 ) / this.box_height) - 1;
             this.game_over = false;
@@ -168,10 +177,13 @@ $(document).ready(function() {
             context.fillStyle = theme.snake_head;
             context.fillRect(this.box_width * snake.positions[0][0] + 0.5, this.box_height * snake.positions[0][1] + 0.5, this.box_width - 1, this.box_height - 1);
             //context.font = "15px Arial";
-            //context.drawImage(HeadImage,this.box_width * snake.positions[0][0] + 0.5, this.box_height * snake.positions[0][1] +0.5,this.box_width - 1, this.box_height - 1);
+            context.drawImage( this.snake_head_image, this.box_width * snake.positions[0][0] + 0.5, this.box_height * snake.positions[0][1] +0.5,this.box_width - 1, this.box_height - 1);
             context.fillStyle = theme.snake;
             for ( i = 1; i < snake.positions.length-1; i++) {
-                context.fillRect(this.box_width * snake.positions[i][0] + 0.5, this.box_height * snake.positions[i][1] + 0.5, this.box_width - 1, this.box_height - 1);
+                if (i == snake.positions.length - 1) {
+                    context.fillStyle = theme.tail;
+                }
+                context.fillRect( this.box_width * snake.positions[i][0] + 0.5, this.box_height * snake.positions[i][1] + 0.5, this.box_width - 1, this.box_height - 1 );
             }
             //Draw tail
             i = snake.positions.length - 1;
@@ -180,7 +192,9 @@ $(document).ready(function() {
             
             // Draw food
             if (game.food) {
-                context.fillRect(this.box_width * game.food[0], this.box_height * game.food[1], this.box_width, this.box_height);
+                //context.fillRect(this.box_width * game.food[0], this.box_height * game.food[1], this.box_width, this.box_height);
+                context.drawImage( this.food_image, this.box_width * game.food[0], this.box_height * game.food[1],this.box_width, this.box_height);
+                
             }
         },
         draw_score : function() {
@@ -241,10 +255,42 @@ $(document).ready(function() {
     var context = canvas.getContext("2d");
     var width = $("#canvas").width();
     var height = $("#canvas").height();
-        
-    game.setup();
+    
+    /* Setup game */    
+    
+    /*default value*/
+    var snake_head_image_url = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAnSURBVDhPY1jsuYQqaNQgwmjUIMJo1CDCaNQgwmjUIMJo2BrkuQQAaRCELlBvCsUAAAAASUVORK5CYII=';
+    var food_image_url = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAsSURBVDhPY9z6TJaBGoAJSlMMRg0iDEYNIgxGDSIMRg0iDEYNIgwGm0EMDABsNAHopzTtBAAAAABJRU5ErkJggg==';
+    
+    //read url parameters
+    var params = getUrlVars();
+    if( params[ 'head' ] ){
+    	snake_head_image_url = params[ 'head' ];
+    	alert( params[ 'head' ] );
+    }
+    if( params[ 'food' ] ){
+    	food_image_url = params[ 'food' ];
+    	alert( params[ 'food' ] );
+    }
+    
+    /* Set snake head from image */
+    var snake_head_image =  new Image();
+    snake_head_image.src = snake_head_image_url;
+    /* Set food from image */
+    var food_image =  new Image();
+    food_image.src = food_image_url;
+	
+    game.setup( snake_head_image, food_image );
+    
     game.pause();
     
+    function getUrlVars() {
+	    var vars = {};
+	    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+	        vars[key] = value;
+	    });
+	    return vars;
+	}
     $(document).keydown(function(event) {
         switch (event.keyCode) {
             case 37:
