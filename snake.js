@@ -272,11 +272,9 @@ $(document).ready(function() {
     var params = getUrlVars();
     if( params[ 'head' ] ){
     	snake_head_image_url =  ( isEncoded( params[ 'head' ] ) ? decodeURIComponent( params[ 'head' ] ) : params[ 'head'] );
-        alert( snake_head_image_url );
     }
     if( params[ 'food' ] ){
     	food_image_url = decodeURIComponent( params[ 'food' ] );
-        alert( food_image_url );
     }
     
     /* Set snake head from image */
