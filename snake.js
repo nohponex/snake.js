@@ -271,10 +271,12 @@ $(document).ready(function() {
     //read url parameters
     var params = getUrlVars();
     if( params[ 'head' ] ){
-    	snake_head_image_url = params[ 'head' ];
+    	snake_head_image_url =  ( isEncoded( params[ 'head' ] ) ? decodeURIComponent( params[ 'head' ] ) : params[ 'head'] );
+        alert( snake_head_image_url );
     }
     if( params[ 'food' ] ){
-    	food_image_url = params[ 'food' ];
+    	food_image_url = decodeURIComponent( params[ 'food' ] );
+        alert( food_image_url );
     }
     
     /* Set snake head from image */
@@ -288,6 +290,8 @@ $(document).ready(function() {
     
     game.pause();
     
+    function isEncoded(str){return decodeURIComponent(str) !== str;}
+
     function getUrlVars() {
 	    var vars = {};
 	    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
