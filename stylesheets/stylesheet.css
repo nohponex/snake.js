@@ -245,3 +245,63 @@ a {
 .cf {
   zoom:1;
 }
+
+.form-control {
+    display: block;
+    width: 100%;
+    height: 20px;
+    padding: 8px 6px;
+    font-size: 12px;
+    line-height: 1.42857;
+    color: #333;
+    background-color: #FFF;
+    background-image: none;
+    border: 1px solid #DDD;
+    border-radius: 4px;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+}
+code,kbd,pre,samp{
+  font-family:monospace, monospace;
+  font-size:1em
+}
+
+code{
+  padding:2px 4px;
+  font-size:90%;
+  color:#c7254e;
+  background-color:#f9f2f4;
+  border-radius:4px
+}
+
+kbd{
+  padding:2px 4px;
+  font-size:90%;
+  color:#ffffff;
+  background-color:#333333;
+  border-radius:3px;
+  box-shadow:inset 0 -1px 0 rgba(0,0,0,0.25)
+}
+
+kbd kbd{
+  padding:0;
+  font-size:100%;
+  box-shadow:none
+}
+.btn2 {
+    display: inline-block;
+    margin-bottom: 0px;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    padding: 8px 12px;
+    font-size: 16px;
+    line-height: 1.42857;
+    border-radius: 4px;
+    -moz-user-select: none;
+    color:#63c0f5;
+}
