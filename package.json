@@ -1,15 +1,15 @@
 {
-  "name": "snake",
+  "name": "snake.js",
   "version": "1.0.0",
   "description": "Snake HTML5 game",
-  "main": "snake.js",
+  "main": "/src/snake.js",
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/NohponeX/snake.git"
+    "url": "https://github.com/NohponeX/snake.js.git"
   },
   "keywords": [
     "game",
@@ -19,9 +19,9 @@
   "author": "Spafaridis Xenophon <nohponex@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/NohponeX/snake/issues"
+    "url": "https://github.com/NohponeX/snake.js/issues"
   },
-  "homepage": "https://github.com/NohponeX/snake",
+  "homepage": "https://github.com/NohponeX/snake.js",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-comment-toggler": "^0.2.1",
