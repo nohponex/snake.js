@@ -36,14 +36,26 @@ module.exports = function (grunt) {
       }
     },
     jscs: {
-      src: ['src/*.js'],
-      options: {
-        config: '.jscsrc',
-        fix: true,
-        force: true,
-        esnext: true, // If you use ES6 http://jscs.info/overview.html#esnext
-        verbose: false // If you need output with rule names http://jscs.info/overview.html#verbose
-      }
+      main: {
+        src: ['src/*.js'],
+        options: {
+          config: '.jscsrc',
+          fix: false,
+          force: true,
+          esnext: true, // If you use ES6 http://jscs.info/overview.html#esnext
+          verbose: false // If you need output with rule names http://jscs.info/overview.html#verbose
+        },
+      },
+      /*fix: {
+        src: ['src/*.js'],
+        options: {
+          config: '.jscsrc',
+          fix: true,
+          force: true,
+          esnext: true, // If you use ES6 http://jscs.info/overview.html#esnext
+          verbose: false // If you need output with rule names http://jscs.info/overview.html#verbose
+        }
+      }*/
     },
     jshint: {
       allFiles: [
@@ -63,17 +75,16 @@ module.exports = function (grunt) {
         ]}
     },
     htmlclean: {
-    options: {
-    },
-    deploy: {
-      expand: true,
-      cwd: 'build/',
-      src: '**/*.html',
-      dest: 'build/'
+      options: {
+      },
+      deploy: {
+        expand: true,
+        cwd: 'build/',
+        src: '**/*.html',
+        dest: 'build/'
+      }
     }
-  }
   });
-  
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-html-build');
@@ -82,7 +93,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks("grunt-jscs");
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-htmlclean');
-  
   // Default task(s).
   //grunt.registerTask('default', ['ngAnnotate', 'uglify',  'watch']);
   grunt.registerTask('default', ['jscs', 'jshint']); //test

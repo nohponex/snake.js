@@ -1,9 +1,13 @@
 /*var HeadImage = new Image();
  HeadImage.src = 'images/Q.png';*/
-var lastTime = 0;
 
 (function() {
 
+  /**
+   * Color theme
+   * @wtf xx
+   * @type object
+   */
   var theme = {
     snake: '#9C4150',
     snakeHead: '#222',
@@ -14,6 +18,10 @@ var lastTime = 0;
     tail: 'rgba(156, 65, 80, 0.75)'
   };
 
+  /**
+   * Movement directions
+   * @type object
+   */
   var directions = {
     left: [-1, 0],
     right: [+1, 0],
@@ -34,6 +42,10 @@ var lastTime = 0;
     }
   };
 
+  /**
+   * Snake object
+   * @type object
+   */
   var snake = {
     direction: directions.up,
     positions: [],
@@ -65,7 +77,10 @@ var lastTime = 0;
     sounds: true,
     paused: false,
     level: 0,
-    levelSpeed: [200, 150, 137, 125, 112, 100, 82, 75, 62, 55, 50, 45, 40],
+    levelSpeed: [200, 199, 197, 196, 194, 191, 189, 186, 183, 181, 178, 175,
+      171, 168, 165, 161, 158, 154, 150, 147, 143, 139, 135, 131, 127, 123,
+      119, 114, 110, 106, 101, 97, 92, 88, 83, 79, 74, 69, 64, 59, 55, 50,
+      45, 40, 35], /*using 200-pow(i,1.35) */
     currentSeed: 0,
     setup: function() {
       this.width = Math.floor(width / this.boxWidth) - 1;
@@ -74,10 +89,10 @@ var lastTime = 0;
       this.clearBorder = true;
       snake.direction = directions.up;
       snake.positions = [[
-        Math.floor(Math.random() * (this.width - 1)) + 1,
-        Math.floor(
-          Math.random() * (this.height - this.height / 2) + this.height / 2)
-      ]];
+          Math.floor(Math.random() * (this.width - 1)) + 1,
+          Math.floor(
+            Math.random() * (this.height - this.height / 2) + this.height / 2)
+        ]];
       snake.eat();
       snake.eat();
       snake.eat();
@@ -180,7 +195,7 @@ var lastTime = 0;
                 this.boxHeight * j,
                 this.boxWidth,
                 this.boxHeight
-              );
+                );
             }
           }
         }
@@ -191,7 +206,7 @@ var lastTime = 0;
           this.boxHeight,
           (game.width - 1) * this.boxWidth,
           (game.height - 1) * this.boxHeight
-        );
+          );
       }
 
       // Draw snake
@@ -199,17 +214,17 @@ var lastTime = 0;
       context.fillRect(this.boxWidth * snake.positions[0][0] + 0.5,
         this.boxHeight * snake.positions[0][1] + 0.5,
         this.boxWidth - 1, this.boxHeight - 1
-      );
+        );
 
       //context.font = '15px Arial';
       //context.drawImage(HeadImage,this.boxWidth * snake.positions[0][0] + 0.5, this.boxHeight * snake.positions[0][1] +0.5,this.boxWidth - 1, this.boxHeight - 1);
-      
+
       context.fillStyle = theme.snake;
       for (i = 1; i < snake.positions.length - 1; ++i) {
         context.fillRect(this.boxWidth * snake.positions[i][0] + 0.5,
           this.boxHeight * snake.positions[i][1] + 0.5, this.boxWidth - 1,
           this.boxHeight - 1
-        );
+          );
       }
 
       //Draw tail
@@ -218,7 +233,7 @@ var lastTime = 0;
       context.fillRect(this.boxWidth * snake.positions[i][0] + 0.5,
         this.boxHeight * snake.positions[i][1] + 0.5, this.boxWidth - 1,
         this.boxHeight - 1
-      );
+        );
 
       // Draw food
       if (game.food) {
@@ -226,32 +241,32 @@ var lastTime = 0;
         context.fillRect(this.boxWidth * game.food[0],
           this.boxHeight * game.food[1],
           this.boxWidth, this.boxHeight
-        );
+          );
       }
     },
     drawScore: function() {
       context.clearRect(0, (game.height + 2) * this.boxHeight,
         width, height - (game.height + 2) * this.boxHeight
-      );
+        );
       context.fillStyle = theme.score;
       context.fillText('Score : ' + this.score + ' Level : ' + this.level,
         this.boxWidth, (game.height + 3) * this.boxHeight
-      );
+        );
     },
     drawGameover: function() {
       context.fillStyle = theme.score;
       context.fillText('Game over press Enter to play',
-      this.boxWidth + 150, (game.height + 3) * this.boxHeight);
+        this.boxWidth + 150, (game.height + 3) * this.boxHeight);
     },
     drawPaused: function() {
       context.fillStyle = theme.score;
       context.fillText('Game paused press p to play',
-      this.boxWidth + 150, (game.height + 3) * this.boxHeight);
+        this.boxWidth + 150, (game.height + 3) * this.boxHeight);
     },
     checkSnakeCollusion: function() {
       for (var i = 1; i < snake.positions.length; ++i) {
-        if (snake.positions[i][0] == snake.positions[0][0] &&
-          snake.positions[i][1] == snake.positions[0][1]) {
+        if (snake.positions[i][0] === snake.positions[0][0] &&
+          snake.positions[i][1] === snake.positions[0][1]) {
           return true;
         }
       }
@@ -313,7 +328,6 @@ var lastTime = 0;
         } else if (directions.left !== directions.opposite(snake.direction)) {
           snake.direction = directions.left;
         }
-
         event.preventDefault();
         break;
       case 38:
@@ -323,17 +337,15 @@ var lastTime = 0;
         } else if (directions.up !== directions.opposite(snake.direction)) {
           snake.direction = directions.up;
         }
-
         event.preventDefault();
         break;
       case 39:
       case 68:
         if (snake.direction === directions.right) {
           game.tick();
-        } else if (directions.right != directions.opposite(snake.direction)) {
+        } else if (directions.right !== directions.opposite(snake.direction)) {
           snake.direction = directions.right;
         }
-
         event.preventDefault();
         break;
       case 40:
@@ -343,7 +355,6 @@ var lastTime = 0;
         } else if (directions.down !== directions.opposite(snake.direction)) {
           snake.direction = directions.down;
         }
-
         event.preventDefault();
         break;
       case 13:
@@ -351,7 +362,6 @@ var lastTime = 0;
           game.restart();
           event.preventDefault();
         }
-
         break;
       case 80:
         if (game.gameOver) {
@@ -362,7 +372,6 @@ var lastTime = 0;
         } else {
           game.pause();
         }
-
         event.preventDefault();
         break;
     }
