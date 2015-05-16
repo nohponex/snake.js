@@ -1,7 +1,7 @@
-snake
+snake.js
 =====
 
-HTML5 Snake Game
+Snake game
 Using HTML5 and Javascript
 
 
@@ -10,7 +10,6 @@ Controls
 - Arrow keys OR WASD keys to move
 - p to pause/resume
 - Enter to start new
-
 
 Development
 =====
@@ -23,7 +22,7 @@ Build
 =====
 To build execute:
 ```shell
-grunt
+grunt build
 ```  
   
 Result will be available at build/ folder.
