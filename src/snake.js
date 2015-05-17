@@ -1,12 +1,13 @@
-/*var HeadImage = new Image();
- HeadImage.src = 'images/Q.png';*/
+/**
+ * HTML5 Canvas snake game
+ * @author Spafaridis Xenophon <nohponex@gmail.com>
+ * @version 1
+ */
 
 (function() {
-
   /**
    * Color theme
-   * @wtf xx
-   * @type object
+   * @type {Object}
    */
   var theme = {
     snake: '#9C4150',
@@ -20,13 +21,18 @@
 
   /**
    * Movement directions
-   * @type object
+   * @type {Object}
    */
   var directions = {
     left: [-1, 0],
     right: [+1, 0],
     up: [0, -1],
     down: [0, +1],
+    /**
+     * Get opposite direction
+     * @param {Array} direction
+     * @returns {Array} Returns opposite direction vector
+     */
     opposite: function(direction) {
       if (direction === directions.left) {
         return directions.right;
@@ -44,11 +50,20 @@
 
   /**
    * Snake object
-   * @type object
+   * @type {sss}
    */
   var snake = {
+    /**
+     * Current snake's direction
+     */
     direction: directions.up,
+    /**
+     * Snake parts positions
+     */
     positions: [],
+    /**
+     * Move snake
+     */
     move: function() {
       var head = [this.positions[0][0] + this.direction[0],
         this.positions[0][1] + this.direction[1]
@@ -56,6 +71,9 @@
       this.positions.pop();
       this.positions.unshift(head);
     },
+    /**
+     * Expand snake
+     */
     eat: function() {
       var head = [this.positions[0][0] + this.direction[0],
         this.positions[0][1] + this.direction[1]
@@ -63,7 +81,10 @@
       this.positions.unshift(head);
     }
   };
-
+  /**
+   * Game board
+   * @type {Object}
+   */
   var game = {
     interval: null,
     width: 0,
@@ -81,7 +102,10 @@
       171, 168, 165, 161, 158, 154, 150, 147, 143, 139, 135, 131, 127, 123,
       119, 114, 110, 106, 101, 97, 92, 88, 83, 79, 74, 69, 64, 59, 55, 50,
       45, 40, 35], /*using 200-pow(i,1.35) */
-    currentSeed: 0,
+    currentSpeed: 0,
+    /**
+     * Setup game
+     */
     setup: function() {
       this.width = Math.floor(width / this.boxWidth) - 1;
       this.height = Math.floor((height - 30) / this.boxHeight) - 1;
@@ -98,10 +122,13 @@
       snake.eat();
       game.score = 0;
       game.level = 0;
-      game.currentSeed = game.levelSpeed[ game.level ];
-      game.interval = setInterval(game.tick, game.currentSeed);
+      game.currentSpeed = game.levelSpeed[ game.level ];
+      game.interval = setInterval(game.tick, game.currentSpeed);
       game.drawScore();
     },
+    /**
+     * Initialize game
+     */
     initialize: function() {
       game.setup();
       this.gameOver = true;
@@ -109,23 +136,34 @@
       game.draw();
       game.drawGameover();
     },
+    /**
+     * Restart game
+     */
     restart: function() {
-      console.log('restart');
       clearInterval(game.interval);
       game.setup();
     },
+    /**
+     * Pause game
+     */
     pause: function() {
       game.paused = true;
       game.drawPaused();
     },
+    /**
+     * Resume game state
+     */
     resume: function() {
       game.paused = false;
       if (!game.interval) {
-        game.interval = setInterval(game.tick, game.currentSeed);
+        game.interval = setInterval(game.tick, game.currentSpeed);
       }
 
       game.drawScore();
     },
+    /**
+     * Game level up handler
+     */
     levelUp: function() {
       if (game.level + 1 >= game.levelSpeed.length) {
         return;
@@ -136,9 +174,12 @@
         game.interval = null;
       }
 
-      game.currentSeed = game.levelSpeed[ ++game.level ];
-      game.interval = setInterval(game.tick, game.currentSeed);
+      game.currentSpeed = game.levelSpeed[ ++game.level ];
+      game.interval = setInterval(game.tick, game.currentSpeed);
     },
+    /**
+     * Game time tick
+     */
     tick: function() {
       if (game.gameOver) {
         return;
@@ -179,6 +220,9 @@
       }
 
     },
+    /**
+     * Draw board
+     */
     draw: function() {
 
       var i;
@@ -190,7 +234,7 @@
         context.fillStyle = theme.border;
         for (i = 0; i <= game.width; i++) {
           for (j = 0; j <= game.height; j++) {
-            if (!j || !i || j == game.height || i == game.width) {
+            if (!j || !i || j === game.height || i === game.width) {
               context.fillRect(this.boxWidth * i,
                 this.boxHeight * j,
                 this.boxWidth,
@@ -214,7 +258,7 @@
       context.fillRect(this.boxWidth * snake.positions[0][0] + 0.5,
         this.boxHeight * snake.positions[0][1] + 0.5,
         this.boxWidth - 1, this.boxHeight - 1
-        );
+      );
 
       //context.font = '15px Arial';
       //context.drawImage(HeadImage,this.boxWidth * snake.positions[0][0] + 0.5, this.boxHeight * snake.positions[0][1] +0.5,this.boxWidth - 1, this.boxHeight - 1);
@@ -244,6 +288,9 @@
           );
       }
     },
+    /**
+     * Draw score details
+     */
     drawScore: function() {
       context.clearRect(0, (game.height + 2) * this.boxHeight,
         width, height - (game.height + 2) * this.boxHeight
@@ -253,16 +300,26 @@
         this.boxWidth, (game.height + 3) * this.boxHeight
         );
     },
+    /**
+     * Draw gameover state controls
+     */
     drawGameover: function() {
       context.fillStyle = theme.score;
       context.fillText('Game over press Enter to play',
         this.boxWidth + 150, (game.height + 3) * this.boxHeight);
     },
+    /**
+     * Draw paused state controls
+     */
     drawPaused: function() {
       context.fillStyle = theme.score;
       context.fillText('Game paused press p to play',
         this.boxWidth + 150, (game.height + 3) * this.boxHeight);
     },
+    /**
+     * Check if snake collides with it self
+     * @returns {boolean}
+     */
     checkSnakeCollusion: function() {
       for (var i = 1; i < snake.positions.length; ++i) {
         if (snake.positions[i][0] === snake.positions[0][0] &&
@@ -273,6 +330,10 @@
 
       return false;
     },
+    /**
+     * Check if snake collides with wall
+     * @returns {boolean}
+     */
     checkWallCollusion: function() {
       var x = snake.positions[0][0];
       var y = snake.positions[0][1];
@@ -282,10 +343,17 @@
 
       return false;
     },
+    /**
+     * Check if food is eaten
+     * @returns {boolean}
+     */
     checkEatFood: function() {
       return (snake.positions[ 0 ][0] == game.food[0] &&
         snake.positions[ 0 ][1] == game.food[1]);
     },
+    /**
+     * Add food to game
+     */
     createFood: function() {
       var x = 0;
       var y = 0;
@@ -318,7 +386,10 @@
 
   game.setup();
   game.pause();
-
+  /**
+   * On keyword event function handler
+   * @param {type} event
+   */
   document.onkeydown = function(event) {
     switch (event.keyCode) {
       case 37:
@@ -379,9 +450,15 @@
 
   var AudioPlayer = {
     sounds: {},
+    /**
+     * Plays consume sound
+     */
     consume: function() {
       this.sounds.consume.play();
     },
+    /**
+     * Initialize AudioPlayer
+     */
     initialize: function() {
       this.sounds.consume = new Audio();
 
