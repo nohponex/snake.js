@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <style type="text/css">
+      div.canvas_container {
+        margin-left: auto;
+        margin-right: auto;
+        width: 700px;
+      }
+      canvas {
+        background-color: #C6D4C1;
+      }
+    </style>
+    <title>snake.js - form</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1><a href="https://github.com/NohponeX/snake.js/tree/image-parameters">snake.js</a></h1>
+        <!--<h2>HTML5 Snake Game</h2>-->
+
+
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <form action="params.html" method="get">
+          <legend>Snake - Select images</legend>
+
+          <label>Food image:</label>
+          <input class="form-control" name="food" placeholder="Food image..." />
+          <label>Head image:</label>
+          <input class="form-control" name="head" placeholder="Head image..." />
+          <p>
+            <small>
+              Images can be url to image files for example :<br/>
+              <code>https://pbs.twimg.com/profile_images/3702798811/e6f198f1600a04605ffd74e9c4b601de_normal.jpeg</code> <br/>
+              or image encoded as base64 strings for example  :<br/>
+              <code>data:image/jpg;base64,/9j/4QAYRXhpZgAASUkqAAgAAAAAAAAAAAAAAP/...</code> <br/>
+              Optimal image size : 24x24 pixel
+              Leave empty to use default values
+            </small>
+          </p>
+          <button class="btn2" type="submit">Create</button>
+        </form>
+      </section>
+    </div>
+  </body>
+</html>
