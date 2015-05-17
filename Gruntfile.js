@@ -12,9 +12,9 @@ module.exports = function (grunt) {
     watch: {
       scripts: {
         files: 'src/*',
-        tasks: ['jscs'],
+        tasks: ['jscs', 'jshint', 'validation'],
         options: {
-          interrupt: false,
+          interrupt: false
         }
       }
     },
@@ -73,7 +73,8 @@ module.exports = function (grunt) {
       }
     },
     clean: {
-      dist: ['dist/']
+      dist: ['dist/'],
+      validation: [ 'validation-*.json' ]
     },
     validation: {
       options: {
@@ -97,8 +98,8 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-html-validation');
 
   // Default task(s)
-  grunt.registerTask('default', ['jscs', 'jshint', 'validation']); // validate javascript files
-  grunt.registerTask('+w', ['jscs', 'jshint', 'validation', 'watch']); // validate javascript files and watch
+  grunt.registerTask('default', ['jscs', 'jshint', 'clean:validation', 'validation']); // validate javascript files
+  grunt.registerTask('+w', ['jscs', 'jshint', 'clean:validation', 'validation', 'watch']); // validate javascript files and watch
   grunt.registerTask('build', ['jscs', 'jshint', 'validation', 'clean',
     'uglify', 'htmlbuild', 'toggleComments', 'copy', 'htmlclean']); // Prepare distribution
 };

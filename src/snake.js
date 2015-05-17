@@ -1,10 +1,14 @@
 /**
  * HTML5 Canvas snake game
+ * TODO:
+ * - add food movement
+ * - add obstacles
+ * 
  * @author Spafaridis Xenophon <nohponex@gmail.com>
  * @version 1
  */
 
-(function (window) {
+(function(window) {
   /**
    * Color theme
    * @type {Object}
@@ -33,7 +37,7 @@
      * @param {Array} direction
      * @returns {Array} Returns opposite direction vector
      */
-    opposite: function (direction) {
+    opposite: function(direction) {
       if (direction === directions.left) {
         return directions.right;
       } else if (direction === directions.right) {
@@ -64,7 +68,7 @@
     /**
      * Move snake
      */
-    move: function () {
+    move: function() {
       var head = [this.positions[0][0] + this.direction[0],
         this.positions[0][1] + this.direction[1]
       ];
@@ -74,13 +78,53 @@
     /**
      * Expand snake
      */
-    eat: function () {
+    eat: function() {
       var head = [this.positions[0][0] + this.direction[0],
         this.positions[0][1] + this.direction[1]
       ];
       this.positions.unshift(head);
     }
   };
+
+  var food = {
+    direction: null,
+    position: null,
+    /**
+     * Activate food chase mode
+     * WARNING: Experimental!
+     */
+    chase: function() {
+      //dump way
+      //console.log('chase');
+      this.direction = directions.up;
+
+      var diffX = snake.positions[0][0] - this.position[0];
+      var diffY = snake.positions[0][1] - this.position[1];
+      //todo avoid collision with snake's body
+
+      if (Math.abs(diffX) >= Math.abs(diffY)) {
+        this.direction = (diffX > 0 ? directions.right : directions.left);
+      } else {
+        this.direction = (diffY > 0 ? directions.down : directions.up);
+      }
+    },
+    /**
+     * Move food
+     * WARNING:  Experimental!
+     */
+    move: function() {
+      if (!this.direction) {
+        return;
+      }
+      //Miss 1 in 5 steps
+      if (Math.floor((Math.random() * 5)) === 0) {
+        return;
+      }
+      this.position[0] += this.direction[0];
+      this.position[1] += this.direction[1];
+    }
+  };
+
   /**
    * Game board
    * @type {Object}
@@ -91,7 +135,8 @@
     height: 0,
     boxWidth: 15,
     boxHeight: 15,
-    food: null,
+    //food: null,
+    foods: food,
     score: 0,
     gameOver: true,
     clearBorder: true,
@@ -99,8 +144,8 @@
     paused: false,
     level: 0,
     canvas: null,
-    canvas_width: 0,
-    canvas_height: 0,
+    canvasWidth: 0,
+    canvasHeight: 0,
     context: null,
     levelSpeed: [200, 199, 197, 196, 194, 191, 189, 186, 183, 181, 178, 175,
       171, 168, 165, 161, 158, 154, 150, 147, 143, 139, 135, 131, 127, 123,
@@ -110,9 +155,9 @@
     /**
      * Setup game
      */
-    setup: function () {
-      this.width = Math.floor(this.canvas_width / this.boxWidth) - 1;
-      this.height = Math.floor((this.canvas_height - 30) / this.boxHeight) - 1;
+    setup: function() {
+      this.width = Math.floor(this.canvasWidth / this.boxWidth) - 1;
+      this.height = Math.floor((this.canvasHeight - 30) / this.boxHeight) - 1;
       this.gameOver = false;
       this.clearBorder = true;
       snake.direction = directions.up;
@@ -133,7 +178,7 @@
     /**
      * Initialize game
      */
-    initialize: function () {
+    initialize: function() {
       game.setup();
       this.gameOver = true;
       clearInterval(game.interval);
@@ -143,21 +188,21 @@
     /**
      * Restart game
      */
-    restart: function () {
+    restart: function() {
       clearInterval(game.interval);
       game.setup();
     },
     /**
      * Pause game
      */
-    pause: function () {
+    pause: function() {
       game.paused = true;
       game.drawPaused();
     },
     /**
      * Resume game state
      */
-    resume: function () {
+    resume: function() {
       game.paused = false;
       if (!game.interval) {
         game.interval = setInterval(game.tick, game.currentSpeed);
@@ -168,7 +213,7 @@
     /**
      * Game level up handler
      */
-    levelUp: function () {
+    levelUp: function() {
       if (game.level + 1 >= game.levelSpeed.length) {
         return;
       }
@@ -184,7 +229,7 @@
     /**
      * Game time tick
      */
-    tick: function () {
+    tick: function() {
       if (game.gameOver) {
         return;
       }
@@ -196,7 +241,7 @@
         return;
       }
 
-      if (game.food === null) {
+      if (game.foods.position === null) {
         game.createFood();
       } else if (game.checkEatFood()) {
         snake.eat();
@@ -204,9 +249,13 @@
         game.score++;
         game.drawScore();
         AudioPlayer.consume();
-        if (game.score > game.level * 4) {
+        if (game.score > game.level * 3) {
           game.levelUp();
         }
+      }
+      if (game.level === 1) {
+        game.foods.chase();
+        game.foods.move();
       }
 
       snake.move();
@@ -227,14 +276,17 @@
     /**
      * Draw board
      */
-    draw: function () {
+    draw: function() {
 
       var i;
       var j;
 
       //Draw borders
       if (game.clearBorder) {
-        game.context.clearRect(0, 0, game.canvas_width, this.boxHeight * game.height);
+        game.context.clearRect(0,
+          0,
+          game.canvasWidth, this.boxHeight * game.height
+          );
         game.context.fillStyle = theme.border;
         for (i = 0; i <= game.width; i++) {
           for (j = 0; j <= game.height; j++) {
@@ -284,10 +336,11 @@
         );
 
       // Draw food
-      if (game.food) {
+      if (game.foods.position) {
         game.context.fillStyle = theme.food;
-        game.context.fillRect(this.boxWidth * game.food[0],
-          this.boxHeight * game.food[1],
+        game.context.fillRect(
+          this.boxWidth * game.foods.position[0],
+          this.boxHeight * game.foods.position[1],
           this.boxWidth, this.boxHeight
           );
       }
@@ -295,9 +348,9 @@
     /**
      * Draw score details
      */
-    drawScore: function () {
+    drawScore: function() {
       game.context.clearRect(0, (game.height + 2) * this.boxHeight,
-        game.canvas_width, game.canvas_height - (game.height + 2) * this.boxHeight
+        game.canvasWidth, game.canvasHeight - (game.height + 2) * this.boxHeight
         );
       game.context.fillStyle = theme.score;
       game.context.fillText('Score : ' + this.score + ' Level : ' + this.level,
@@ -307,7 +360,7 @@
     /**
      * Draw gameover state controls
      */
-    drawGameover: function () {
+    drawGameover: function() {
       game.context.fillStyle = theme.score;
       game.context.fillText('Game over press Enter to play',
         this.boxWidth + 150, (game.height + 3) * this.boxHeight);
@@ -315,7 +368,7 @@
     /**
      * Draw paused state controls
      */
-    drawPaused: function () {
+    drawPaused: function() {
       game.context.fillStyle = theme.score;
       game.context.fillText('Game paused press p to play',
         this.boxWidth + 150, (game.height + 3) * this.boxHeight);
@@ -324,7 +377,7 @@
      * Check if snake collides with it self
      * @returns {boolean}
      */
-    checkSnakeCollusion: function () {
+    checkSnakeCollusion: function() {
       for (var i = 1; i < snake.positions.length; ++i) {
         if (snake.positions[i][0] === snake.positions[0][0] &&
           snake.positions[i][1] === snake.positions[0][1]) {
@@ -338,7 +391,7 @@
      * Check if snake collides with wall
      * @returns {boolean}
      */
-    checkWallCollusion: function () {
+    checkWallCollusion: function() {
       var x = snake.positions[0][0];
       var y = snake.positions[0][1];
       if (!x || !y || x >= game.width || y >= game.height) {
@@ -351,14 +404,14 @@
      * Check if food is eaten
      * @returns {boolean}
      */
-    checkEatFood: function () {
-      return (snake.positions[ 0 ][0] == game.food[0] &&
-        snake.positions[ 0 ][1] == game.food[1]);
+    checkEatFood: function() {
+      return (snake.positions[ 0 ][0] === game.foods.position[0] &&
+        snake.positions[ 0 ][1] === game.foods.position[1]);
     },
     /**
      * Add food to game
      */
-    createFood: function () {
+    createFood: function() {
       var x = 0;
       var y = 0;
       var found = false;
@@ -378,22 +431,21 @@
           }
         }
       } while (found);
-      game.food = [x, y];
+      game.foods.position = [x, y];
     }
   };
-
 
   window.snake = {
     /**
      * Initialize snake game
      * @param {string} id
      */
-    initialize: function (id) {
+    initialize: function(id) {
       //Canvas stuff
       game.canvas = document.getElementById(id);
       game.context = game.canvas.getContext('2d');
-      game.canvas_width = game.canvas.offsetWidth;
-      game.canvas_height = game.canvas.offsetHeight;
+      game.canvasWidth = game.canvas.offsetWidth;
+      game.canvasHeight = game.canvas.offsetHeight;
 
       game.setup();
       game.pause();
@@ -404,7 +456,7 @@
    * On keyword event function handler
    * @param {event} event
    */
-  document.onkeydown = function (event) {
+  document.onkeydown = function(event) {
     switch (event.keyCode) {
       //left direction
       case 37:
@@ -476,26 +528,26 @@
     /**
      * Plays consume sound
      */
-    consume: function () {
+    consume: function() {
       this.sounds.consume.play();
     },
     /**
      * Plays gameOver sound
      */
-    gameOver: function () {
+    gameOver: function() {
       this.sounds.gameOver.play();
     },
     /**
      * Initialize AudioPlayer
      */
-    initialize: function () {
+    initialize: function() {
       this.sounds.consume = new Audio();
 
       this.sounds.consume.setAttribute('src', 'sounds/pick_up.ogg');
       this.sounds.consume.repeat = false;
       this.sounds.consume.loop = false;
       this.sounds.consume.volume = 0.15;
-      
+
       this.sounds.gameOver = new Audio();
 
       this.sounds.gameOver.setAttribute('src', 'sounds/game_over.ogg');
