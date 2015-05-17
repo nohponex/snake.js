@@ -34,8 +34,8 @@ module.exports = function(grunt) {
     },
     htmlbuild: {
       dist: {
-        src: 'src/snake.html',
-        dest: 'dist/',
+        src: 'dist/index.html',
+        dest: 'dist/index.html',
         options: {
         }
       }
@@ -46,7 +46,7 @@ module.exports = function(grunt) {
           padding: 4,
           removeCommands: true
         },
-        files: {'dist/snake.html': 'dist/snake.html'}
+        files: {'dist/index.html': 'dist/index.html'}
       }
     },
     jscs: {
@@ -74,6 +74,9 @@ module.exports = function(grunt) {
       main: {
         files: [
           {expand: true, cwd: 'src/', src: ['images/*', 'sounds/*'], dest: 'dist/', filter: 'isFile'},
+          {expand: true, cwd: 'src/', src: 'snake.html', dest: 'dist/', rename: function(dest, src) {
+              return dest + src.replace('snake.html', 'index.html');
+            }},
         ]}
     },
     htmlclean: {
@@ -113,7 +116,6 @@ module.exports = function(grunt) {
     less: {
       development: {
         options: {
-          
         },
         files: {
           'src/style.css': ['src/*.less']
@@ -122,7 +124,7 @@ module.exports = function(grunt) {
     },
     'gh-pages': {
       options: {
-        base: 'dist'
+        base: 'dist/'
       },
       src: ['**']
     }
@@ -144,7 +146,7 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['jscs', 'jshint', 'clean:validation', 'less', 'validation']); // validate javascript files
   grunt.registerTask('+w', ['jscs', 'jshint', 'clean:validation', 'validation', 'less', 'watch']); // validate javascript files and watch
   grunt.registerTask('build', ['jscs', 'jshint', 'validation', 'less', 'clean',
-    'uglify', 'cssmin', 'htmlbuild', 'toggleComments', 'copy', 'htmlclean']); // Prepare distribution
-  grunt.registerTask('gh-pages', ['gh-pages']);
-  
+    'uglify', 'cssmin', 'copy', 'htmlbuild', 'toggleComments', 'htmlclean']); // Prepare distribution
+  grunt.registerTask('pages', ['gh-pages']);
+
 };

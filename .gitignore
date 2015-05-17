@@ -1,7 +1,8 @@
 validation-status.json
 validation-report.json
 /node_modules/
-/tests/
-/nbproject/
+tests/
+nbproject/
+.grunt/
 
 src/style.css
