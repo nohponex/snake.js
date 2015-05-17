@@ -105,22 +105,18 @@
 
       // < to avoid, > to chase
       if (Math.abs(diffX) >= Math.abs(diffY)) {
-        console.log(['x', diffX]);
         dist = diffX;
         if (diffX === 0) {
-          console.log([snake.direction, directions.opposite(snake.direction)]);
           this.direction = directions.opposite(snake.direction);
-        }else{
+        } else {
           this.direction = (diffX >= 0  ? directions.right : directions.left);
         }
-        
         alternative = (diffY >= 0 ? directions.down : directions.up);
       } else {
-        console.log(['y', diffY]);
         dist = diffY;
         if (diffY === 0) {
           this.direction = directions.opposite(snake.direction);
-        }else{
+        } else {
           this.direction = (diffY >= 0 ? directions.down : directions.up);
         }
         alternative = (diffX >= 0 ? directions.right : directions.left);
@@ -129,7 +125,7 @@
       if (this.willCollide(this.direction)) {
         this.direction = null;
         console.log('avoiding collition with snake`s body');
-        if (dist !==0 && !this.willCollide(alternative)) {
+        if (dist !== 0 && !this.willCollide(alternative)) {
           this.direction = alternative;
           console.log('use alternative direction');
         }
@@ -447,7 +443,7 @@
         game.canvasWidth, game.canvasHeight - (game.height + 2) * this.boxHeight
         );
       game.context.fillStyle = theme.score;
-      game.context.fillText('Score : ' + this.score + ' Level : ' + this.level,
+      game.context.fillText('Score: ' + this.score + ' Level: ' + this.level,
         this.boxWidth, (game.height + 3) * this.boxHeight
         );
     },

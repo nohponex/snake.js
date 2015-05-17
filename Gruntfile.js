@@ -119,6 +119,12 @@ module.exports = function(grunt) {
           'src/style.css': ['src/*.less']
         }
       }
+    },
+    'gh-pages': {
+      options: {
+        base: 'dist'
+      },
+      src: ['**']
     }
   });
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -133,10 +139,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-html-validation');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-less');
-
+  grunt.loadNpmTasks('grunt-gh-pages');
   // Default task(s)
   grunt.registerTask('default', ['jscs', 'jshint', 'clean:validation', 'less', 'validation']); // validate javascript files
   grunt.registerTask('+w', ['jscs', 'jshint', 'clean:validation', 'validation', 'less', 'watch']); // validate javascript files and watch
   grunt.registerTask('build', ['jscs', 'jshint', 'validation', 'less', 'clean',
     'uglify', 'cssmin', 'htmlbuild', 'toggleComments', 'copy', 'htmlclean']); // Prepare distribution
+  grunt.registerTask('gh-pages', ['gh-pages']);
+  
 };

@@ -32,6 +32,7 @@
     "grunt-contrib-less": "^1.0.1",
     "grunt-contrib-uglify": "^0.9.1",
     "grunt-contrib-watch": "^0.6.1",
+    "grunt-gh-pages": "^0.10.0",
     "grunt-html-build": "^0.5.0",
     "grunt-html-validation": "^0.1.18",
     "grunt-htmlclean": "^2.6.3",
