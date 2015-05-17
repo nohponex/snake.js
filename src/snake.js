@@ -216,6 +216,7 @@
       }
 
       if (game.gameOver) {
+        AudioPlayer.gameOver();
         clearInterval(game.interval);
         game.drawScore();
         game.drawGameover();
@@ -466,7 +467,10 @@
         break;
     }
   };
-
+  /**
+   * AudioPlayer object - contains sounds
+   * @type {Object}
+   */
   var AudioPlayer = {
     sounds: {},
     /**
@@ -476,15 +480,28 @@
       this.sounds.consume.play();
     },
     /**
+     * Plays gameOver sound
+     */
+    gameOver: function () {
+      this.sounds.gameOver.play();
+    },
+    /**
      * Initialize AudioPlayer
      */
     initialize: function () {
       this.sounds.consume = new Audio();
 
-      this.sounds.consume.setAttribute('src', 'sounds/pick_up.wav');
+      this.sounds.consume.setAttribute('src', 'sounds/pick_up.ogg');
       this.sounds.consume.repeat = false;
       this.sounds.consume.loop = false;
       this.sounds.consume.volume = 0.15;
+      
+      this.sounds.gameOver = new Audio();
+
+      this.sounds.gameOver.setAttribute('src', 'sounds/game_over.ogg');
+      this.sounds.gameOver.repeat = false;
+      this.sounds.gameOver.loop = false;
+      this.sounds.gameOver.volume = 0.15;
 
     }
   };
