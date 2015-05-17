@@ -100,43 +100,42 @@
 
       var diffX = snake.positions[0][0] - this.position[0];
       var diffY = snake.positions[0][1] - this.position[1];
-
+      var dist;
       var alternative = null;
 
-      if (Math.abs(diffX) < Math.abs(diffY)) {
-        this.direction = (diffX > 0 ? directions.right : directions.left);
-        alternative = (diffY > 0 ? directions.down : directions.up);
+      // < to avoid, > to chase
+      if (Math.abs(diffX) >= Math.abs(diffY)) {
+        console.log(['x', diffX]);
+        dist = diffX;
+        if (diffX === 0) {
+          console.log([snake.direction, directions.opposite(snake.direction)]);
+          this.direction = directions.opposite(snake.direction);
+        }else{
+          this.direction = (diffX >= 0  ? directions.right : directions.left);
+        }
+        
+        alternative = (diffY >= 0 ? directions.down : directions.up);
       } else {
-        this.direction = (diffY > 0 ? directions.down : directions.up);
-        alternative = (diffX > 0 ? directions.right : directions.left);
+        console.log(['y', diffY]);
+        dist = diffY;
+        if (diffY === 0) {
+          this.direction = directions.opposite(snake.direction);
+        }else{
+          this.direction = (diffY >= 0 ? directions.down : directions.up);
+        }
+        alternative = (diffX >= 0 ? directions.right : directions.left);
       }
 
-      //running experiment
-      this.direction = directions.opposite(this.direction);
-      alternative = directions.opposite(alternative);
-      //avoid collision
-      /*while (this.willCollide(this.direction) && index < 3) {
-       //next direction
-       if (this.direction === directions.left){
-       this.direction = directions.up;
-       }else if (this.direction === directions.up){
-       this.direction = directions.right;
-       }else if (this.direction === directions.right){
-       this.direction = directions.down;
-       }else if (this.direction === directions.down){
-       this.direction = directions.left;
-       }
-       ++index;
-       }*/
       if (this.willCollide(this.direction)) {
         this.direction = null;
         console.log('avoiding collition with snake`s body');
-        if (!this.willCollide(alternative)) {
+        if (dist !==0 && !this.willCollide(alternative)) {
           this.direction = alternative;
           console.log('use alternative direction');
         }
       }
-      if (this.outOfBorders(this.direction)) {
+      if (this.direction && this.outOfBorders(this.direction)) {
+        console.log('outOfBorders');
         this.direction = null;
         if (!this.outOfBorders(alternative)) {
           this.direction = alternative;
@@ -153,7 +152,7 @@
       }
       //Miss 1 in 5 steps
       if (Math.floor((Math.random() * 5)) === 0) {
-        return;
+        //return;
       }
       this.position[0] += this.direction[0];
       this.position[1] += this.direction[1];
@@ -236,8 +235,8 @@
         /* Set food from image */
         this.foodImage = food;
       }
-      this.width = Math.floor(this.canvasWidth / this.boxWidth) - 1;
-      this.height = Math.floor((this.canvasHeight - 30) / this.boxHeight) - 1;
+      this.width = Math.ceil(this.canvasWidth / this.boxWidth) - 1;
+      this.height = Math.ceil((this.canvasHeight - 30) / this.boxHeight) - 1;
       this.gameOver = false;
       this.clearBorder = true;
       snake.direction = directions.up;
@@ -359,7 +358,6 @@
      * Draw board
      */
     draw: function() {
-
       var i;
       var j;
 
@@ -368,7 +366,7 @@
         game.context.clearRect(0,
           0,
           game.canvasWidth, this.boxHeight * game.height
-          );
+        );
         game.context.fillStyle = theme.border;
         for (i = 0; i <= game.width; i++) {
           for (j = 0; j <= game.height; j++) {
@@ -377,7 +375,7 @@
                 this.boxHeight * j,
                 this.boxWidth,
                 this.boxHeight
-                );
+              );
             }
           }
         }
@@ -406,7 +404,6 @@
        this.boxWidth - 1, this.boxHeight - 1
        );*/
 
-      game.context.font = '12px monospace';
       //game.context.drawImage(HeadImage,this.boxWidth * snake.positions[0][0] + 0.5, this.boxHeight * snake.positions[0][1] +0.5,this.boxWidth - 1, this.boxHeight - 1);
 
       game.context.fillStyle = theme.snake;
@@ -460,7 +457,7 @@
     drawGameover: function() {
       game.context.fillStyle = theme.score;
       game.context.fillText('Game over press Enter to play',
-        this.boxWidth + 150, (game.height + 3) * this.boxHeight);
+        this.boxWidth + 175, (game.height + 3) * this.boxHeight);
     },
     /**
      * Draw paused state controls
@@ -468,7 +465,7 @@
     drawPaused: function() {
       game.context.fillStyle = theme.score;
       game.context.fillText('Game paused press p to play',
-        this.boxWidth + 150, (game.height + 3) * this.boxHeight);
+        this.boxWidth + 175, (game.height + 3) * this.boxHeight);
     },
     /**
      * Check if snake collides with it self
@@ -568,8 +565,9 @@ BAQMAAAAl21bKAAAAA1BMVEX/zAB+rZF1AAAACklEQVQI12NgAAAAAgAB4iG8MwAAAABJRU5ErkJggg\
       foodImage.src = foodImageURL;
 
       //Canvas stuff
-      game.canvas = document.getElementById(id);
+      game.canvas = window.document.getElementById(id);
       game.context = game.canvas.getContext('2d');
+      game.context.font = '14px monospace';
       game.canvasWidth = game.canvas.offsetWidth;
       game.canvasHeight = game.canvas.offsetHeight;
 
