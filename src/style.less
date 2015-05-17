@@ -1,0 +1,41 @@
+@background: #FEF9F0;
+@text: #9C4150;
+
+body {
+  background-color: @background;
+}
+body, a, a:visited{
+  color:@text;
+}
+div.canvas_container {
+  display: flex;
+  justify-content: center;
+}
+#controls{
+  padding-top:10px;
+  display: flex;
+  justify-content: center;
+}
+canvas {
+  background-color: @background;
+}
+div.canvas_container h4{
+  margin-top:3px;
+  text-align:right;
+  font-size:12px;
+}
+kbd {
+  padding: 2px 4px;
+  font-size: 80%;
+  color: #FFF;
+  background-color: #333;
+  border-radius: 2px;
+  box-shadow: 0px -1px 0px rgba(0, 0, 0, 0.25) inset;
+  font-family: monospace,monospace;
+}
+kbd + kbd{
+  margin-left: 1px;
+}
+li + li{
+  margin-top: 5px;
+}

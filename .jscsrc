@@ -1,5 +1,6 @@
 {
     "preset": "google",
+    "disallowMultipleLineStrings": null,
     "plugins": [
         "jscs-jsdoc"
     ],

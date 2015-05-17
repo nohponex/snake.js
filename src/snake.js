@@ -3,7 +3,7 @@
  * TODO:
  * - add food movement
  * - add obstacles
- * 
+ *
  * @author Spafaridis Xenophon <nohponex@gmail.com>
  * @version 1
  */
@@ -152,10 +152,21 @@
       119, 114, 110, 106, 101, 97, 92, 88, 83, 79, 74, 69, 64, 59, 55, 50,
       45, 40, 35], /*using 200-pow(i,1.35) */
     currentSpeed: 0,
+    snakeHeadImage: null,
+    foodImage: null,
     /**
      * Setup game
      */
-    setup: function() {
+    setup: function(snakeHead, food) {
+      if (snakeHead) {
+        /* Set snake head from image */
+        this.snakeHeadImage = snakeHead;
+      }
+
+      if (food) {
+        /* Set food from image */
+        this.foodImage = food;
+      }
       this.width = Math.floor(this.canvasWidth / this.boxWidth) - 1;
       this.height = Math.floor((this.canvasHeight - 30) / this.boxHeight) - 1;
       this.gameOver = false;
@@ -311,10 +322,18 @@
 
       // Draw snake
       game.context.fillStyle = theme.snakeHead;
-      game.context.fillRect(this.boxWidth * snake.positions[0][0] + 0.5,
+      game.context.drawImage(
+        this.snakeHeadImage,
+        this.boxWidth * snake.positions[0][0] + 0.5,
         this.boxHeight * snake.positions[0][1] + 0.5,
-        this.boxWidth - 1, this.boxHeight - 1
+        this.boxWidth - 1,
+        this.boxHeight - 1
         );
+
+      /*game.context.fillRect(this.boxWidth * snake.positions[0][0] + 0.5,
+       this.boxHeight * snake.positions[0][1] + 0.5,
+       this.boxWidth - 1, this.boxHeight - 1
+       );*/
 
       //game.context.font = '15px Arial';
       //game.context.drawImage(HeadImage,this.boxWidth * snake.positions[0][0] + 0.5, this.boxHeight * snake.positions[0][1] +0.5,this.boxWidth - 1, this.boxHeight - 1);
@@ -338,10 +357,17 @@
       // Draw food
       if (game.foods.position) {
         game.context.fillStyle = theme.food;
-        game.context.fillRect(
+        /*game.context.fillRect(
+         this.boxWidth * game.foods.position[0],
+         this.boxHeight * game.foods.position[1],
+         this.boxWidth, this.boxHeight
+         );*/
+        game.context.drawImage(
+          this.foodImage,
           this.boxWidth * game.foods.position[0],
-          this.boxHeight * game.foods.position[1],
-          this.boxWidth, this.boxHeight
+          this.boxWidth * game.foods.position[1],
+          this.boxWidth,
+          this.boxWidth
           );
       }
     },
@@ -441,17 +467,65 @@
      * @param {string} id
      */
     initialize: function(id) {
+
+      // default values
+      /*jshint multistr: true */
+      var snakeHeadImageURL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA\
+AEAAAABAQMAAAAl21bKAAAAA1BMVEVYCxel8h7eAAAACklEQVQI12NgAAAAAgAB4iG8MwAAAABJRU5E\
+rkJggg==';
+      /*jshint multistr: true */
+      var foodImageURL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAA\
+BAQMAAAAl21bKAAAAA1BMVEX/zAB+rZF1AAAACklEQVQI12NgAAAAAgAB4iG8MwAAAABJRU5ErkJggg\
+==';
+      //read url parameters
+      var params = getUrlVars();
+      if (params.head) {
+        snakeHeadImageURL = (isEncoded(params.head) ?
+          decodeURIComponent(params.head) :
+          params.head
+          );
+      }
+      if (params.food) {
+        foodImageURL = decodeURIComponent(params.food);
+      }
+
+      /* Set snake head from image */
+      var snakeHeadImage = new Image();
+      snakeHeadImage.src = snakeHeadImageURL;
+      /* Set food from image */
+      var foodImage = new Image();
+      foodImage.src = foodImageURL;
+
       //Canvas stuff
       game.canvas = document.getElementById(id);
       game.context = game.canvas.getContext('2d');
       game.canvasWidth = game.canvas.offsetWidth;
       game.canvasHeight = game.canvas.offsetHeight;
 
-      game.setup();
+      game.setup(snakeHeadImage, foodImage);
       game.pause();
     }
   };
 
+  /**
+   * Check if string is url encoded
+   * @param {string} str
+   * @returns {boolean}
+   */
+  function isEncoded(str) {
+    return decodeURIComponent(str) !== str;
+  }
+  /**
+   * Get url variables
+   * @returns {Array}
+   */
+  function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
+      vars[key] = value;
+    });
+    return vars;
+  }
   /**
    * On keyword event function handler
    * @param {event} event

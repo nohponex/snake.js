@@ -1,18 +1,32 @@
-module.exports = function (grunt) {
+module.exports = function(grunt) {
 // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     uglify: {
       min: {
         files: {
-          'dist/snake.min.js': ['src/snake.js']
+          'dist/snake.min.js': ['src/*.js']
         }
       }
     },
     watch: {
       scripts: {
-        files: 'src/*',
-        tasks: ['jscs', 'jshint', 'validation'],
+        files: ['src/*.js'],
+        tasks: ['jscs', 'jshint'],
+        options: {
+          interrupt: false
+        }
+      },
+      html: {
+        files: ['src/*.html'],
+        tasks: ['validation'],
+        options: {
+          interrupt: false
+        }
+      },
+      less: {
+        files: ['src/*.less'],
+        tasks: ['less'],
         options: {
           interrupt: false
         }
@@ -74,7 +88,7 @@ module.exports = function (grunt) {
     },
     clean: {
       dist: ['dist/'],
-      validation: [ 'validation-*.json' ]
+      validation: ['validation-*.json']
     },
     validation: {
       options: {
@@ -83,6 +97,27 @@ module.exports = function (grunt) {
       },
       files: {
         src: ['src/*.html'],
+      }
+    },
+    cssmin: {
+      options: {
+        shorthandCompacting: false,
+        roundingPrecision: -1
+      },
+      target: {
+        files: {
+          'dist/style.css': ['src/*.css']
+        }
+      }
+    },
+    less: {
+      development: {
+        options: {
+          
+        },
+        files: {
+          'src/style.css': ['src/*.less']
+        }
       }
     }
   });
@@ -96,10 +131,12 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-htmlclean');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-html-validation');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-less');
 
   // Default task(s)
-  grunt.registerTask('default', ['jscs', 'jshint', 'clean:validation', 'validation']); // validate javascript files
-  grunt.registerTask('+w', ['jscs', 'jshint', 'clean:validation', 'validation', 'watch']); // validate javascript files and watch
-  grunt.registerTask('build', ['jscs', 'jshint', 'validation', 'clean',
-    'uglify', 'htmlbuild', 'toggleComments', 'copy', 'htmlclean']); // Prepare distribution
+  grunt.registerTask('default', ['jscs', 'jshint', 'clean:validation', 'less', 'validation']); // validate javascript files
+  grunt.registerTask('+w', ['jscs', 'jshint', 'clean:validation', 'validation', 'less', 'watch']); // validate javascript files and watch
+  grunt.registerTask('build', ['jscs', 'jshint', 'validation', 'less', 'clean',
+    'uglify', 'cssmin', 'htmlbuild', 'toggleComments', 'copy', 'htmlclean']); // Prepare distribution
 };

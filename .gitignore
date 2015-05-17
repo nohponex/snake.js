@@ -3,3 +3,6 @@ validation-report.json
 /node_modules/
 /tests/
 /nbproject/
+
+src/style.css
+dist/
