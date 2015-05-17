@@ -73,17 +73,17 @@ module.exports = function (grunt) {
       }
     },
     clean: {
-	  dist: ['dist/']
-	},
-	validation: {
-	  options: {
-	      reset: grunt.option('reset') || false,
-	      stoponerror: false,
-	  },
-	  files: {
+      dist: ['dist/']
+    },
+    validation: {
+      options: {
+        reset: grunt.option('reset') || false,
+        stoponerror: false,
+      },
+      files: {
         src: ['src/*.html'],
-     }
-	}
+      }
+    }
   });
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
