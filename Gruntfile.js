@@ -87,7 +87,7 @@ module.exports = function(grunt) {
       }
     },
     clean: {
-      dist: ['dist/'],
+      dist: ['dist/**.*', '!.gitignore'],
       validation: ['validation-*.json']
     },
     validation: {

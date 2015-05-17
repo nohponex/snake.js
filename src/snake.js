@@ -100,12 +100,47 @@
 
       var diffX = snake.positions[0][0] - this.position[0];
       var diffY = snake.positions[0][1] - this.position[1];
-      //todo avoid collision with snake's body
 
-      if (Math.abs(diffX) >= Math.abs(diffY)) {
+      var alternative = null;
+
+      if (Math.abs(diffX) < Math.abs(diffY)) {
         this.direction = (diffX > 0 ? directions.right : directions.left);
+        alternative = (diffY > 0 ? directions.down : directions.up);
       } else {
         this.direction = (diffY > 0 ? directions.down : directions.up);
+        alternative = (diffX > 0 ? directions.right : directions.left);
+      }
+
+      //running experiment
+      this.direction = directions.opposite(this.direction);
+      alternative = directions.opposite(alternative);
+      //avoid collision
+      /*while (this.willCollide(this.direction) && index < 3) {
+       //next direction
+       if (this.direction === directions.left){
+       this.direction = directions.up;
+       }else if (this.direction === directions.up){
+       this.direction = directions.right;
+       }else if (this.direction === directions.right){
+       this.direction = directions.down;
+       }else if (this.direction === directions.down){
+       this.direction = directions.left;
+       }
+       ++index;
+       }*/
+      if (this.willCollide(this.direction)) {
+        this.direction = null;
+        console.log('avoiding collition with snake`s body');
+        if (!this.willCollide(alternative)) {
+          this.direction = alternative;
+          console.log('use alternative direction');
+        }
+      }
+      if (this.outOfBorders(this.direction)) {
+        this.direction = null;
+        if (!this.outOfBorders(alternative)) {
+          this.direction = alternative;
+        }
       }
     },
     /**
@@ -122,6 +157,40 @@
       }
       this.position[0] += this.direction[0];
       this.position[1] += this.direction[1];
+    },
+    /**
+     * Check if direction will collide with snake's body
+     */
+    willCollide: function(direction) {
+      var position = [
+        this.position[0] + direction[0],
+        this.position[1] + direction[1]
+      ];
+
+      for (i = 1; i < snake.positions.length; ++i) {
+        if (position[0] === snake.positions[i][0] &&
+          position[1] === snake.positions[i][1]) {
+          return true;
+        }
+      }
+
+      return false;
+    },
+    /**
+     * Check if direction will cause outOfBorders
+     */
+    outOfBorders: function(direction) {
+      var position = [
+        this.position[0] + direction[0],
+        this.position[1] + direction[1]
+      ];
+
+      if (position[0] < 1 || position[1] < 1 ||
+        position[0] >= game.width || position[1] >= game.height) {
+        return true;
+      }
+
+      return false;
     }
   };
 
@@ -264,12 +333,14 @@
           game.levelUp();
         }
       }
-      if (game.level === 1) {
+
+      snake.move();
+
+      if (game.foods.position && game.level % 2) {
         game.foods.chase();
         game.foods.move();
       }
 
-      snake.move();
       game.draw();
       if (game.checkWallCollusion() || game.checkSnakeCollusion()) {
         game.gameOver = true;
@@ -335,7 +406,7 @@
        this.boxWidth - 1, this.boxHeight - 1
        );*/
 
-      //game.context.font = '15px Arial';
+      game.context.font = '12px monospace';
       //game.context.drawImage(HeadImage,this.boxWidth * snake.positions[0][0] + 0.5, this.boxHeight * snake.positions[0][1] +0.5,this.boxWidth - 1, this.boxHeight - 1);
 
       game.context.fillStyle = theme.snake;
