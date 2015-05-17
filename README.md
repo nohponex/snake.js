@@ -1,28 +1,28 @@
-snake.js
-=====
+#snake
 
-Snake game
-Using HTML5 and Javascript
+HTML5 Snake Game, using HTML5 Canvas and Javascript.
 
-
+---------------------------------------
 Controls
-=====
+-------------
 - Arrow keys OR WASD keys to move
 - p to pause/resume
-- Enter to start new
+- Enter to start new game when game is over
+
 
 Development
-=====
-To validate and test the code execute:  
+-------------
+To validate and test the code execute:
+
 ```shell
 grunt
 ```
 
 Build
-=====
+-------------
 To build execute:
+
 ```shell
 grunt build
-```  
-  
-Result will be available at build/ folder.
+```
+Build result will be available at dist/ folder.
