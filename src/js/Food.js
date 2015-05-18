@@ -19,7 +19,7 @@ define(['snake', 'directions'], function(snake, directions) {
 
   Food.prototype.Types = {
     passive: 1,
-    hostile :2
+    hostile: 2
   };
   /**
    * Activate food chase mode
@@ -37,10 +37,10 @@ define(['snake', 'directions'], function(snake, directions) {
     // < to avoid, > to chase
     if (
       (this.type === Food.prototype.Types.passive &&
-        Math.abs(diffX) < Math.abs(diffY)) || 
+        Math.abs(diffX) < Math.abs(diffY)) ||
       (this.type === Food.prototype.Types.hostile &&
-       Math.abs(diffX) >= Math.abs(diffY))) {
-       
+        Math.abs(diffX) >= Math.abs(diffY))) {
+
       dist = diffX;
       if (diffX === 0) {
         this.direction = directions.opposite(snake.direction);
@@ -57,12 +57,12 @@ define(['snake', 'directions'], function(snake, directions) {
       }
       alternative = (diffX >= 0 ? directions.right : directions.left);
     }
-    
-    if(this.type === Food.prototype.Types.passive) {
+
+    if (this.type === Food.prototype.Types.passive) {
       this.direction = directions.opposite(this.direction);
       alternative = directions.opposite(alternative);
     }
-    
+
     if (this.willCollide(this.direction)) {
       this.direction = null;
       console.log('avoiding collition with snake`s body');
@@ -101,7 +101,7 @@ define(['snake', 'directions'], function(snake, directions) {
    * @param {Array} direction
    */
   Food.prototype.willCollide = function(direction) {
-    if (!direction){
+    if (!direction) {
       direction = [0, 0];
     }
     var position = [
@@ -130,7 +130,7 @@ define(['snake', 'directions'], function(snake, directions) {
    * @param {Array} direction
    */
   Food.prototype.outOfBorders = function(direction) {
-    if (!direction){
+    if (!direction) {
       direction = [0, 0];
     }
     var position = [
@@ -140,7 +140,7 @@ define(['snake', 'directions'], function(snake, directions) {
     var game = require('game');
     //todo reset +/- 1
     if (position[0] <= 1 || position[1] <= 1 ||
-      position[0] >= game.width -1 || position[1] >= game.height-1) {
+      position[0] >= game.width - 1 || position[1] >= game.height - 1) {
       return true;
     }
 

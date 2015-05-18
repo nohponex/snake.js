@@ -16,7 +16,7 @@ module.exports = function(grunt) {
     },
     watch: {
       scripts: {
-        files: ['src/*.js'],
+        files: ['src/*.js', 'src/js/*.js'],
         tasks: ['jscs', 'jshint'],
         options: {
           interrupt: false
@@ -56,7 +56,7 @@ module.exports = function(grunt) {
     },
     jscs: {
       main: {
-        src: ['src/*.js'],
+        src: ['src/*.js', 'src/js/*.js'],
         options: {
           config: '.jscsrc',
           fix: false,
@@ -69,7 +69,8 @@ module.exports = function(grunt) {
     jshint: {
       allFiles: [
         'Gruntfile.js',
-        'src/*.js'
+        'src/*.js',
+        'src/js/*.js'
       ],
       options: {
         jshintrc: '.jshintrc'
@@ -102,10 +103,10 @@ module.exports = function(grunt) {
     validation: {
       options: {
         reset: grunt.option('reset') || false,
-        stoponerror: false,
+        stoponerror: false
       },
       files: {
-        src: ['src/*.html'],
+        src: ['src/*.html']
       }
     },
     cssmin: {

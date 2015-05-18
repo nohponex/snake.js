@@ -119,8 +119,8 @@ define(['snake', 'Food', 'directions', 'theme', 'audio'],
         var type = Food.prototype.Types.passive;
         //Add additional foods
         for (var i = game.foods.length - 1; i < game.level; ++i) {
-          
-          if (i >= Math.round(game.level/3)) {
+
+          if (i >= Math.round(game.level / 3)) {
             type = Food.prototype.Types.hostile;
           }
           game.createFood(type);
@@ -263,11 +263,11 @@ define(['snake', 'Food', 'directions', 'theme', 'audio'],
           game.context.fillStyle = theme.food;
           if (f.type === Food.prototype.Types.passive) {
             game.context.fillRect(
-             game.boxWidth * f.position[0],
-             game.boxHeight * f.position[1],
-             game.boxWidth,
-             game.boxHeight
-             );
+              game.boxWidth * f.position[0],
+              game.boxHeight * f.position[1],
+              game.boxWidth,
+              game.boxHeight
+              );
           } else {
             game.context.drawImage(
               game.foodImage,
@@ -343,33 +343,33 @@ define(['snake', 'Food', 'directions', 'theme', 'audio'],
       checkEatFood: function() {
         var indeces = [];
         var count = {};
-        for(var t in Food.prototype.Types){
+        for (var t in Food.prototype.Types) {
           count[Food.prototype.Types[t]] = 0;
         }
-        
+
         game.foods.forEach(function(f, fIndex) {
           if (snake.positions[0][0] === f.position[0] &&
             snake.positions[0][1] === f.position[1]) {
             //remove food
             indeces.push(fIndex);
-          }else{
+          } else {
             ++count[f.type];
           }
         });
-        
+
         if (indeces.length) {
           //remove eaten
-          game.foods = game.foods.filter(function(f, fIndex){
-              return indeces.indexOf(fIndex) < 0;
+          game.foods = game.foods.filter(function(f, fIndex) {
+            return indeces.indexOf(fIndex) < 0;
           });
           console.log(count);
           if (count[Food.prototype.Types.passive] === 0) {
             //remove all hostiles
-            game.foods = game.foods.filter(function(f){
+            game.foods = game.foods.filter(function(f) {
               return f.type === Food.prototype.Types.passive;
             });
           }
-          
+
           return true;
         } else {
           return false;
