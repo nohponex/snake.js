@@ -4,5 +4,5 @@ validation-report.json
 tests/
 nbproject/
 .grunt/
-
+bower_components/
 src/style.css

@@ -26,3 +26,7 @@ To build execute:
 grunt build
 ```
 Build result will be available at dist/ folder.
+
+License
+-------------
+MIT © Spafaridis Xenophon
