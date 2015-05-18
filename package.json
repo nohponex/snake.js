@@ -5,7 +5,8 @@
   "main": "/src/snake.js",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "bower install & grunt"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
   },
   "homepage": "https://github.com/NohponeX/snake.js",
   "devDependencies": {
+    "bower": "^1.4.1",
     "grunt": "^0.4.5",
     "grunt-comment-toggler": "^0.2.1",
     "grunt-contrib-clean": "^0.6.0",
