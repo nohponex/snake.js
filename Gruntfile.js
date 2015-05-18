@@ -137,7 +137,7 @@ module.exports = function(grunt) {
     requirejs: {
       compile: {
         options: {
-          baseUrl: 'src/',
+          baseUrl: 'src/js/',
           mainConfigFile: 'src/config.js',
           name: 'main', // assumes a production build using almond
           out: 'dist/optimized.js'
@@ -145,6 +145,7 @@ module.exports = function(grunt) {
       }
     }
   });
+
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-html-build');
@@ -161,12 +162,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-requirejs');
 
   grunt.registerTask('default',
-  ['jscs', 'jshint', 'clean:validation', 'less', 'validation']); // validate javascript files
+    ['jscs', 'jshint', 'clean:validation', 'less', 'validation']); // validate javascript files
   grunt.registerTask('+w',
-  ['jscs', 'jshint', 'clean:validation', 'validation', 'less', 'watch']); // validate javascript files and watch
+    ['jscs', 'jshint', 'clean:validation', 'validation', 'less', 'watch']); // validate javascript files and watch
   grunt.registerTask('build', ['jscs', 'jshint', 'validation', 'less', 'clean',
     /*'uglify',*/ 'requirejs', 'uglify:requirejs', 'cssmin', 'copy',
     'htmlbuild', 'toggleComments', 'htmlclean']); // Prepare distribution
   grunt.registerTask('pages', ['gh-pages']);
-
 };

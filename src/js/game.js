@@ -67,7 +67,7 @@ define(['snake', 'Food', 'directions', 'theme', 'audio'],
         //snake.eat();
 
         game.score = 0;
-        game.level = 0;
+        game.level = 1;
         game.currentSpeed = game.levelSpeed[ game.level ];
         game.interval = setInterval(game.tick, game.currentSpeed);
 
@@ -116,8 +116,14 @@ define(['snake', 'Food', 'directions', 'theme', 'audio'],
         if (game.level + 1 >= game.levelSpeed.length) {
           return;
         }
+        var type = Food.prototype.Types.passive;
+        //Add additional foods
         for (var i = game.foods.length - 1; i < game.level; ++i) {
-          game.createFood();
+          
+          if (i >= Math.round(game.level/3)) {
+            type = Food.prototype.Types.hostile;
+          }
+          game.createFood(type);
         }
 
         if (game.interval) {
@@ -149,18 +155,18 @@ define(['snake', 'Food', 'directions', 'theme', 'audio'],
           game.createFood();
         } else if (game.checkEatFood()) {
           snake.eat();
-          game.createFood();
+          //game.createFood();
           game.score++;
           game.drawScore();
           audio.consume();
-          if (game.score > game.level * 3) {
+          if (game.score > game.level * 3) { //Score per level
             game.levelUp();
           }
         }
 
         snake.move();
 
-        if (game.foods.length && game.level % 2) {
+        if (game.foods.length && (game.level % 2 || true)) {
 
           game.foods.forEach(function(f) {
             f.chase();
@@ -255,18 +261,22 @@ define(['snake', 'Food', 'directions', 'theme', 'audio'],
         game.foods.forEach(function(f) {
 
           game.context.fillStyle = theme.food;
-          /*game.context.fillRect(
-           this.boxWidth * game.foods.position[0],
-           this.boxHeight * game.foods.position[1],
-           this.boxWidth, this.boxHeight
-           );*/
-          game.context.drawImage(
-            game.foodImage,
-            game.boxWidth * f.position[0],
-            game.boxWidth * f.position[1],
-            game.boxWidth,
-            game.boxWidth
-            );
+          if (f.type === Food.prototype.Types.passive) {
+            game.context.fillRect(
+             game.boxWidth * f.position[0],
+             game.boxHeight * f.position[1],
+             game.boxWidth,
+             game.boxHeight
+             );
+          } else {
+            game.context.drawImage(
+              game.foodImage,
+              game.boxWidth * f.position[0],
+              game.boxHeight * f.position[1],
+              game.boxWidth,
+              game.boxWidth
+              );
+          }
         });
 
       },
@@ -274,13 +284,13 @@ define(['snake', 'Food', 'directions', 'theme', 'audio'],
        * Draw score details
        */
       drawScore: function() {
-        game.context.clearRect(0, (game.height + 2) * this.boxHeight,
+        game.context.clearRect(0, (game.height + 1) * this.boxHeight,
           game.canvasWidth,
-          game.canvasHeight - (game.height + 2) * this.boxHeight
+          game.canvasHeight - (game.height + 1) * this.boxHeight
           );
         game.context.fillStyle = theme.score;
         game.context.fillText('Score: ' + this.score + ' Level: ' + this.level,
-          this.boxWidth, (game.height + 3) * this.boxHeight
+          this.boxWidth, (game.height + 2) * this.boxHeight
           );
       },
       /**
@@ -289,7 +299,7 @@ define(['snake', 'Food', 'directions', 'theme', 'audio'],
       drawGameover: function() {
         game.context.fillStyle = theme.score;
         game.context.fillText('Game over press Enter to play',
-          this.boxWidth + 175, (game.height + 3) * this.boxHeight);
+          this.boxWidth + 175, (game.height + 2) * this.boxHeight);
       },
       /**
        * Draw paused state controls
@@ -297,7 +307,7 @@ define(['snake', 'Food', 'directions', 'theme', 'audio'],
       drawPaused: function() {
         game.context.fillStyle = theme.score;
         game.context.fillText('Game paused press p to play',
-          this.boxWidth + 175, (game.height + 3) * this.boxHeight);
+          this.boxWidth + 175, (game.height + 2) * this.boxHeight);
       },
       /**
        * Check if snake collides with it self
@@ -331,18 +341,35 @@ define(['snake', 'Food', 'directions', 'theme', 'audio'],
        * @returns {boolean}
        */
       checkEatFood: function() {
-        var index = -1;
-        game.foods.some(function(f, fIndex) {
+        var indeces = [];
+        var count = {};
+        for(var t in Food.prototype.Types){
+          count[Food.prototype.Types[t]] = 0;
+        }
+        
+        game.foods.forEach(function(f, fIndex) {
           if (snake.positions[0][0] === f.position[0] &&
             snake.positions[0][1] === f.position[1]) {
             //remove food
-            index = fIndex;
-            return true;
+            indeces.push(fIndex);
+          }else{
+            ++count[f.type];
           }
         });
-
-        if (index >= 0) {
-          game.foods.splice(index, 1);
+        
+        if (indeces.length) {
+          //remove eaten
+          game.foods = game.foods.filter(function(f, fIndex){
+              return indeces.indexOf(fIndex) < 0;
+          });
+          console.log(count);
+          if (count[Food.prototype.Types.passive] === 0) {
+            //remove all hostiles
+            game.foods = game.foods.filter(function(f){
+              return f.type === Food.prototype.Types.passive;
+            });
+          }
+          
           return true;
         } else {
           return false;
@@ -351,8 +378,7 @@ define(['snake', 'Food', 'directions', 'theme', 'audio'],
       /**
        * Add food to game
        */
-      createFood: function() {
-        console.log('create food');
+      createFood: function(type) {
         var x = 0;
         var y = 0;
         var found = false;
@@ -388,7 +414,7 @@ define(['snake', 'Food', 'directions', 'theme', 'audio'],
           game.foods.some(foodExist);
           //todo check if other foods exist
         } while (found);
-        var f = new Food([x, y]);
+        var f = new Food([x, y], (type || Food.prototype.Types.passive));
         game.foods.push(f);
       }
     };

@@ -13,7 +13,7 @@ define([], function() {
   var theme = {
     snake: '#9C4150',
     snakeHead: '#580B17',
-    food: '#FFCC00',
+    food: '#666', //'#FFCC00',
     score: '#9C4150',
     border: '#2D2D2D',
     /*background: '#E3E8E1',*/

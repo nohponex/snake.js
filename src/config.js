@@ -1,5 +1,5 @@
 requirejs.config({
-  baseUrl: '',
+  baseUrl: 'js/',
   paths: {
   }
 });

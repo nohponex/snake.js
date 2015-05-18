@@ -11,11 +11,16 @@ define(['snake', 'directions'], function(snake, directions) {
    * Food object
    * @param {Array} position
    */
-  var Food = function(position) {
+  var Food = function(position, type) {
     this.direction = null;
     this.position = position;
+    this.type = (type || Food.prototype.Types.passive);
   };
 
+  Food.prototype.Types = {
+    passive: 1,
+    hostile :2
+  };
   /**
    * Activate food chase mode
    * WARNING: Experimental!
@@ -30,7 +35,12 @@ define(['snake', 'directions'], function(snake, directions) {
     var alternative = null;
 
     // < to avoid, > to chase
-    if (Math.abs(diffX) >= Math.abs(diffY)) {
+    if (
+      (this.type === Food.prototype.Types.passive &&
+        Math.abs(diffX) < Math.abs(diffY)) || 
+      (this.type === Food.prototype.Types.hostile &&
+       Math.abs(diffX) >= Math.abs(diffY))) {
+       
       dist = diffX;
       if (diffX === 0) {
         this.direction = directions.opposite(snake.direction);
@@ -47,7 +57,12 @@ define(['snake', 'directions'], function(snake, directions) {
       }
       alternative = (diffX >= 0 ? directions.right : directions.left);
     }
-
+    
+    if(this.type === Food.prototype.Types.passive) {
+      this.direction = directions.opposite(this.direction);
+      alternative = directions.opposite(alternative);
+    }
+    
     if (this.willCollide(this.direction)) {
       this.direction = null;
       console.log('avoiding collition with snake`s body');
@@ -73,8 +88,9 @@ define(['snake', 'directions'], function(snake, directions) {
     if (!this.direction) {
       return;
     }
+    var steps = (this.type == Food.prototype.Types.passive ? 5 : 2);
     //Miss 1 in 7 steps
-    if (Math.floor((Math.random() * 7)) === 0) {
+    if (Math.floor((Math.random() * steps)) === 0) {
       return;
     }
     this.position[0] += this.direction[0];
@@ -82,8 +98,12 @@ define(['snake', 'directions'], function(snake, directions) {
   };
   /**
    * Check if direction will collide with snake's body
+   * @param {Array} direction
    */
   Food.prototype.willCollide = function(direction) {
+    if (!direction){
+      direction = [0, 0];
+    }
     var position = [
       this.position[0] + direction[0],
       this.position[1] + direction[1]
@@ -95,9 +115,11 @@ define(['snake', 'directions'], function(snake, directions) {
         return true;
       }
     }
+    //check if collides with other foods
     var game = require('game');
     return game.foods.some(function(f) {
       if (f.position[0] === position[0] && f.position[1] === position[1]) {
+        console.log('COLLIDE WITH OTHER FOOD');
         return true;
       }
     });
@@ -105,15 +127,20 @@ define(['snake', 'directions'], function(snake, directions) {
   };
   /**
    * Check if direction will cause outOfBorders
+   * @param {Array} direction
    */
   Food.prototype.outOfBorders = function(direction) {
+    if (!direction){
+      direction = [0, 0];
+    }
     var position = [
       this.position[0] + direction[0],
       this.position[1] + direction[1]
     ];
     var game = require('game');
-    if (position[0] < 1 || position[1] < 1 ||
-      position[0] >= game.width || position[1] >= game.height) {
+    //todo reset +/- 1
+    if (position[0] <= 1 || position[1] <= 1 ||
+      position[0] >= game.width -1 || position[1] >= game.height-1) {
       return true;
     }
 
