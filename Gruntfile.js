@@ -160,10 +160,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-gh-pages');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
 
-  grunt.registerTask('default', ['jscs', 'jshint', 'clean:validation', 'less', 'validation']); // validate javascript files
-  grunt.registerTask('+w', ['jscs', 'jshint', 'clean:validation', 'validation', 'less', 'watch']); // validate javascript files and watch
+  grunt.registerTask('default',
+  ['jscs', 'jshint', 'clean:validation', 'less', 'validation']); // validate javascript files
+  grunt.registerTask('+w',
+  ['jscs', 'jshint', 'clean:validation', 'validation', 'less', 'watch']); // validate javascript files and watch
   grunt.registerTask('build', ['jscs', 'jshint', 'validation', 'less', 'clean',
-    'uglify', 'requirejs', 'uglify:requirejs', 'cssmin', 'copy', 'htmlbuild', 'toggleComments', 'htmlclean']); // Prepare distribution
+    /*'uglify',*/ 'requirejs', 'uglify:requirejs', 'cssmin', 'copy',
+    'htmlbuild', 'toggleComments', 'htmlclean']); // Prepare distribution
   grunt.registerTask('pages', ['gh-pages']);
 
 };

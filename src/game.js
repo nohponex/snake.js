@@ -4,8 +4,8 @@
  * @author Spafaridis Xenophon <nohponex@gmail.com>
  * @version 1
  */
-define(['snake', 'food', 'directions', 'theme', 'audio'],
-  function(snake, food, directions, theme, audio) {
+define(['snake', 'Food', 'directions', 'theme', 'audio'],
+  function(snake, Food, directions, theme, audio) {
     /**
      * Game board
      * @type {Object}
@@ -16,8 +16,7 @@ define(['snake', 'food', 'directions', 'theme', 'audio'],
       height: 0,
       boxWidth: 15,
       boxHeight: 15,
-      //food: null,
-      foods: null,
+      foods: [],
       score: 0,
       gameOver: true,
       clearBorder: true,
@@ -48,6 +47,10 @@ define(['snake', 'food', 'directions', 'theme', 'audio'],
           /* Set food from image */
           this.foodImage = foodImage;
         }
+
+        //clear foods
+        game.foods.length = 0;
+
         this.width = Math.ceil(this.canvasWidth / this.boxWidth) - 1;
         this.height = Math.ceil((this.canvasHeight - 30) / this.boxHeight) - 1;
         this.gameOver = false;
@@ -61,9 +64,7 @@ define(['snake', 'food', 'directions', 'theme', 'audio'],
           ]];
         snake.eat();
         snake.eat();
-        snake.eat();
-
-        this.foods = food;
+        //snake.eat();
 
         game.score = 0;
         game.level = 0;
@@ -115,6 +116,9 @@ define(['snake', 'food', 'directions', 'theme', 'audio'],
         if (game.level + 1 >= game.levelSpeed.length) {
           return;
         }
+        for (var i = game.foods.length - 1; i < game.level; ++i) {
+          game.createFood();
+        }
 
         if (game.interval) {
           clearInterval(game.interval);
@@ -141,7 +145,7 @@ define(['snake', 'food', 'directions', 'theme', 'audio'],
           return;
         }
 
-        if (game.foods && game.foods.position === null) {
+        if (game.foods.length === 0) {
           game.createFood();
         } else if (game.checkEatFood()) {
           snake.eat();
@@ -156,9 +160,12 @@ define(['snake', 'food', 'directions', 'theme', 'audio'],
 
         snake.move();
 
-        if (game.foods && game.foods.position && game.level % 2) {
-          game.foods.chase();
-          game.foods.move();
+        if (game.foods.length && game.level % 2) {
+
+          game.foods.forEach(function(f) {
+            f.chase();
+            f.move();
+          });
         }
 
         game.draw();
@@ -245,7 +252,8 @@ define(['snake', 'food', 'directions', 'theme', 'audio'],
           );
 
         // Draw food
-        if (game.foods && game.foods.position) {
+        game.foods.forEach(function(f) {
+
           game.context.fillStyle = theme.food;
           /*game.context.fillRect(
            this.boxWidth * game.foods.position[0],
@@ -253,13 +261,14 @@ define(['snake', 'food', 'directions', 'theme', 'audio'],
            this.boxWidth, this.boxHeight
            );*/
           game.context.drawImage(
-            this.foodImage,
-            this.boxWidth * game.foods.position[0],
-            this.boxWidth * game.foods.position[1],
-            this.boxWidth,
-            this.boxWidth
+            game.foodImage,
+            game.boxWidth * f.position[0],
+            game.boxWidth * f.position[1],
+            game.boxWidth,
+            game.boxWidth
             );
-        }
+        });
+
       },
       /**
        * Draw score details
@@ -322,19 +331,44 @@ define(['snake', 'food', 'directions', 'theme', 'audio'],
        * @returns {boolean}
        */
       checkEatFood: function() {
-        if (!game.foods) {
+        var index = -1;
+        game.foods.some(function(f, fIndex) {
+          if (snake.positions[0][0] === f.position[0] &&
+            snake.positions[0][1] === f.position[1]) {
+            //remove food
+            index = fIndex;
+            return true;
+          }
+        });
+
+        if (index >= 0) {
+          game.foods.splice(index, 1);
+          return true;
+        } else {
           return false;
         }
-        return (snake.positions[ 0 ][0] === game.foods.position[0] &&
-          snake.positions[ 0 ][1] === game.foods.position[1]);
       },
       /**
        * Add food to game
        */
       createFood: function() {
+        console.log('create food');
         var x = 0;
         var y = 0;
         var found = false;
+        /**
+         * Check if a food exists at this x, y
+         * @param {Food} f Food object
+         * @returns {boolean}
+         */
+        var foodExist = function(f) {
+          if (f.position[0] === x && f.position[1] === y) {
+            found = true;
+            return true;
+          }
+          return false;
+        };
+
         do {
           found = false;
           x = Math.floor(Math.random() * game.height);
@@ -351,8 +385,11 @@ define(['snake', 'food', 'directions', 'theme', 'audio'],
               break;
             }
           }
+          game.foods.some(foodExist);
+          //todo check if other foods exist
         } while (found);
-        game.foods.position = [x, y];
+        var f = new Food([x, y]);
+        game.foods.push(f);
       }
     };
 

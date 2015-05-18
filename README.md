@@ -11,7 +11,6 @@ Controls
 - p to pause/resume
 - Enter to start new game when game is over
 
-
 Development
 -------------
 To download npm dependencies execute:
