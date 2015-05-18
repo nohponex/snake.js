@@ -7,6 +7,11 @@ module.exports = function(grunt) {
         files: {
           'dist/snake.min.js': ['src/*.js']
         }
+      },
+      requirejs: {
+        files: {
+          'dist/require.min.js': ['bower_components/requirejs/require.js']
+        }
       }
     },
     watch: {
@@ -76,8 +81,9 @@ module.exports = function(grunt) {
           {expand: true, cwd: 'src/', src: ['images/*', 'sounds/*'], dest: 'dist/', filter: 'isFile'},
           {expand: true, cwd: 'src/', src: 'snake.html', dest: 'dist/', rename: function(dest, src) {
               return dest + src.replace('snake.html', 'index.html');
-            }},
-        ]}
+            }}
+        ]
+      }
     },
     htmlclean: {
       options: {
@@ -127,6 +133,16 @@ module.exports = function(grunt) {
         base: 'dist/'
       },
       src: ['**']
+    },
+    requirejs: {
+      compile: {
+        options: {
+          baseUrl: 'src/',
+          mainConfigFile: 'src/config.js',
+          name: 'main', // assumes a production build using almond
+          out: 'dist/optimized.js'
+        }
+      }
     }
   });
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -142,11 +158,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-gh-pages');
-  // Default task(s)
+  grunt.loadNpmTasks('grunt-contrib-requirejs');
+
   grunt.registerTask('default', ['jscs', 'jshint', 'clean:validation', 'less', 'validation']); // validate javascript files
   grunt.registerTask('+w', ['jscs', 'jshint', 'clean:validation', 'validation', 'less', 'watch']); // validate javascript files and watch
   grunt.registerTask('build', ['jscs', 'jshint', 'validation', 'less', 'clean',
-    'uglify', 'cssmin', 'copy', 'htmlbuild', 'toggleComments', 'htmlclean']); // Prepare distribution
+    'uglify', 'requirejs', 'uglify:requirejs', 'cssmin', 'copy', 'htmlbuild', 'toggleComments', 'htmlclean']); // Prepare distribution
   grunt.registerTask('pages', ['gh-pages']);
 
 };
