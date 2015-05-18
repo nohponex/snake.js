@@ -1,12 +1,12 @@
 {
   "name": "snake.js",
   "version": "1.0.0",
-  "description": "Snake HTML5 game",
+  "description": "HTML5 Canvas snake game",
   "main": "/src/snake.js",
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "bower install & grunt"
+    "prepare": "bower update && grunt"
   },
   "repository": {
     "type": "git",
@@ -15,7 +15,8 @@
   "keywords": [
     "game",
     "javascript",
-    "canvas"
+    "canvas",
+    "HTML5"
   ],
   "author": "Spafaridis Xenophon <nohponex@gmail.com>",
   "license": "MIT",

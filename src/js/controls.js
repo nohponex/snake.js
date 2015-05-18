@@ -22,6 +22,7 @@ define(['snake', 'game', 'directions'], function(snake, game, directions) {
           case 65:
             if (snake.direction === directions.left) {
               game.tick();
+              game.resetInterval();
             } else if (
               directions.left !== directions.opposite(snake.direction)) {
               snake.direction = directions.left;
@@ -33,6 +34,7 @@ define(['snake', 'game', 'directions'], function(snake, game, directions) {
           case 87:
             if (snake.direction === directions.up) {
               game.tick();
+              game.resetInterval();
             } else if (
               directions.up !== directions.opposite(snake.direction)) {
               snake.direction = directions.up;
@@ -44,6 +46,7 @@ define(['snake', 'game', 'directions'], function(snake, game, directions) {
           case 68:
             if (snake.direction === directions.right) {
               game.tick();
+              game.resetInterval();
             } else if (
               directions.right !== directions.opposite(snake.direction)) {
               snake.direction = directions.right;
@@ -55,6 +58,7 @@ define(['snake', 'game', 'directions'], function(snake, game, directions) {
           case 83:
             if (snake.direction === directions.down) {
               game.tick();
+              game.resetInterval();
             } else if (
               directions.down !== directions.opposite(snake.direction)) {
               snake.direction = directions.down;

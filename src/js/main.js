@@ -1,5 +1,5 @@
-require(['controller'], //{snake', 'food', 'util', 'controls', 'game', 'controller', 'audio'],
-  function(controller) { //snake, food, util, controls, game, controller, audio) {
+require(['controller', 'theme'], //{snake', 'food', 'util', 'controls', 'game', 'controller', 'audio'],
+  function(controller, theme) { //snake, food, util, controls, game, controller, audio) {
     //Resize canvas
     var canvas = window.document.getElementById('canvas');
 
@@ -10,6 +10,16 @@ require(['controller'], //{snake', 'food', 'util', 'controls', 'game', 'controll
 
     canvas.width = width;
     canvas.height = height;
+
+    //Display food colors as help
+    window.document.querySelector('#foods .passive > span')
+      .style['background-color'] = theme.food;
+
+    window.document.querySelector('#foods .hostile > span')
+      .style['background-color'] = theme.foodHostile;
+
+    window.document.querySelector('#foods .life > span')
+      .style['background-color'] = theme.foodLife;
 
     controller.initialize('canvas');
   });

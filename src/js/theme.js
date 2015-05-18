@@ -13,7 +13,9 @@ define([], function() {
   var theme = {
     snake: '#9C4150',
     snakeHead: '#580B17',
-    food: '#666', //'#FFCC00',
+    food: '#FFCC00', //'#FFCC00',
+    foodHostile: '#E90B1D', //'#FFCC00',
+    foodLife: '#10C910',
     score: '#9C4150',
     border: '#2D2D2D',
     /*background: '#E3E8E1',*/

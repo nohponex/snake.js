@@ -19,7 +19,8 @@ define(['snake', 'directions'], function(snake, directions) {
 
   Food.prototype.Types = {
     passive: 1,
-    hostile: 2
+    hostile: 4,
+    life : 2
   };
   /**
    * Activate food chase mode
@@ -27,7 +28,10 @@ define(['snake', 'directions'], function(snake, directions) {
    */
   Food.prototype.chase = function() {
     //console.log('chase');
-    this.direction = directions.up;
+    this.direction = null;
+    if (this.type === Food.prototype.Types.life) {
+      return;
+    }
 
     var diffX = snake.positions[0][0] - this.position[0];
     var diffY = snake.positions[0][1] - this.position[1];
