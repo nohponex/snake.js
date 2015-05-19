@@ -124,9 +124,9 @@ define(['snake', 'Food', 'directions', 'theme', 'audio'],
         }
         var type = Food.prototype.Types.passive;
         //Add additional foods
-        for (var i = game.foods.length - 1; i < game.level + 10; ++i) {
+        for (var i = game.foods.length - 1; i < game.level/* + 10*/; ++i) {
 
-          if (i >= Math.round(game.level / 3) && false) {
+          if (i >= Math.round(game.level / 3) && true) {
             type = Food.prototype.Types.hostile;
           }
           game.createFood(type);
@@ -161,7 +161,6 @@ define(['snake', 'Food', 'directions', 'theme', 'audio'],
           game.interval = null;
           return;
         }
-        
 
         if (game.foods.length && (game.level % 2 || true)) {
           game.foods.forEach(function(f) {
@@ -169,9 +168,9 @@ define(['snake', 'Food', 'directions', 'theme', 'audio'],
             f.move();
           });
         }
-        
+
         snake.move();
-        
+
         var eaten;
         if (game.foods.length === 0) {
           game.createFood();
@@ -368,9 +367,10 @@ define(['snake', 'Food', 'directions', 'theme', 'audio'],
         }
 
         game.foods.forEach(function(f, fIndex) {
-          if (snake.positions.some(function(p){
+          if (snake.positions.some(function(p, pIndex) {
             return p[0] === f.position[0] &&
-            p[1] === f.position[1];
+              p[1] === f.position[1] &&
+              (f.type !== Food.prototype.Types.hostile || pIndex === 0);
           })
             ) {
 
@@ -390,22 +390,20 @@ define(['snake', 'Food', 'directions', 'theme', 'audio'],
             ++count[f.type];
           }
         });
-        
+
         if (!game.gameOver && indeces.length) {
-          console.log([game.foods.length, indeces]);
           //remove eaten
           //game.foods = game.foods.filter(function(f, fIndex) {
           //return indeces.indexOf(fIndex) < 0;
           //});
-          indeces.forEach(function(i){
+          indeces.forEach(function(i) {
             game.foods.splice(i, 1);
           });
           /*for(var i = indeces.length - 1; i >= 0; --i){
-            if (indeces.indexOf(indeces[i]) >= 0) {
-              game.foods.splice(indeces[i], 1);
-            }
-          }*/
-          console.log(game.foods.length);
+           if (indeces.indexOf(indeces[i]) >= 0) {
+           game.foods.splice(indeces[i], 1);
+           }
+           }*/
           //remove all hostiles if all others are eaten
           if (count[Food.prototype.Types.passive] === 0 &&
             count[Food.prototype.Types.life] === 0) {

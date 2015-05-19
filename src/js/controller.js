@@ -48,8 +48,8 @@ BAQMAAAAl21bKAAAAA1BMVEX/zAB+rZF1AAAACklEQVQI12NgAAAAAgAB4iG8MwAAAABJRU5ErkJggg\
         game.canvas = window.document.getElementById(id);
         game.context = game.canvas.getContext('2d');
         game.context.font = '14px monospace';
-        game.canvasWidth = game.canvas.offsetWidth;
-        game.canvasHeight = game.canvas.offsetHeight;
+        game.canvasWidth = game.canvas.width;
+        game.canvasHeight = game.canvas.height;
 
         audio.initialize();
         controls.initialize();

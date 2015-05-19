@@ -10,6 +10,8 @@ require(['controller', 'theme'], //{snake', 'food', 'util', 'controls', 'game', 
 
     canvas.width = width;
     canvas.height = height;
+    //Chronium hack
+    canvas.parentNode.style.height = '100%';
 
     //Display food colors as help
     window.document.querySelector('#foods .passive > span')

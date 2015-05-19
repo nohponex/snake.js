@@ -20,7 +20,7 @@ define(['snake', 'directions'], function(snake, directions) {
   Food.prototype.Types = {
     passive: 1,
     hostile: 4,
-    life : 2
+    life: 2
   };
   /**
    * Activate food chase mode
