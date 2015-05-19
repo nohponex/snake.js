@@ -124,9 +124,9 @@ define(['snake', 'Food', 'directions', 'theme', 'audio'],
         }
         var type = Food.prototype.Types.passive;
         //Add additional foods
-        for (var i = game.foods.length - 1; i < game.level; ++i) {
+        for (var i = game.foods.length - 1; i < game.level + 10; ++i) {
 
-          if (i >= Math.round(game.level / 3)) {
+          if (i >= Math.round(game.level / 3) && false) {
             type = Food.prototype.Types.hostile;
           }
           game.createFood(type);
@@ -161,6 +161,17 @@ define(['snake', 'Food', 'directions', 'theme', 'audio'],
           game.interval = null;
           return;
         }
+        
+
+        if (game.foods.length && (game.level % 2 || true)) {
+          game.foods.forEach(function(f) {
+            f.chase();
+            f.move();
+          });
+        }
+        
+        snake.move();
+        
         var eaten;
         if (game.foods.length === 0) {
           game.createFood();
@@ -173,16 +184,6 @@ define(['snake', 'Food', 'directions', 'theme', 'audio'],
           if (game.score > game.level * 3) { //Score per level
             game.levelUp();
           }
-        }
-
-        snake.move();
-
-        if (game.foods.length && (game.level % 2 || true)) {
-
-          game.foods.forEach(function(f) {
-            f.chase();
-            f.move();
-          });
         }
 
         game.draw();
@@ -367,8 +368,11 @@ define(['snake', 'Food', 'directions', 'theme', 'audio'],
         }
 
         game.foods.forEach(function(f, fIndex) {
-          if (snake.positions[0][0] === f.position[0] &&
-            snake.positions[0][1] === f.position[1]) {
+          if (snake.positions.some(function(p){
+            return p[0] === f.position[0] &&
+            p[1] === f.position[1];
+          })
+            ) {
 
             //if type is passive
             if (f.type === Food.prototype.Types.passive) {
@@ -386,12 +390,22 @@ define(['snake', 'Food', 'directions', 'theme', 'audio'],
             ++count[f.type];
           }
         });
-
-        if (indeces.length) {
+        
+        if (!game.gameOver && indeces.length) {
+          console.log([game.foods.length, indeces]);
           //remove eaten
-          game.foods = game.foods.filter(function(f, fIndex) {
-            return indeces.indexOf(fIndex) < 0;
+          //game.foods = game.foods.filter(function(f, fIndex) {
+          //return indeces.indexOf(fIndex) < 0;
+          //});
+          indeces.forEach(function(i){
+            game.foods.splice(i, 1);
           });
+          /*for(var i = indeces.length - 1; i >= 0; --i){
+            if (indeces.indexOf(indeces[i]) >= 0) {
+              game.foods.splice(indeces[i], 1);
+            }
+          }*/
+          console.log(game.foods.length);
           //remove all hostiles if all others are eaten
           if (count[Food.prototype.Types.passive] === 0 &&
             count[Food.prototype.Types.life] === 0) {
@@ -442,15 +456,17 @@ define(['snake', 'Food', 'directions', 'theme', 'audio'],
             continue;
           }
 
-          for (var i = 0; i < snake.positions.length; i++) {
-            if (x === snake.positions[ i ][0] &&
-              y === snake.positions[ i ][1]) {
+          for (var i = 0, l = snake.positions.length; i < l; ++i) {
+            if (x === snake.positions[i][0] &&
+              y === snake.positions[i][1]) {
               found = true;
               break;
             }
           }
-          game.foods.some(foodExist);
-          //todo check if other foods exist
+          //check if other foods exist
+          if (!found) {
+            found = game.foods.some(foodExist);
+          }
         } while (found);
         var f = new Food([x, y], type);
         game.foods.push(f);

@@ -70,7 +70,7 @@ define(['snake', 'directions'], function(snake, directions) {
     if (this.willCollide(this.direction)) {
       this.direction = null;
       console.log('avoiding collition with snake`s body');
-      if (dist !== 0 && !this.willCollide(alternative)) {
+      if (/*dist !== 0 && */!this.willCollide(alternative)) {
         this.direction = alternative;
         console.log('use alternative direction');
       }
@@ -78,7 +78,7 @@ define(['snake', 'directions'], function(snake, directions) {
     if (this.direction && this.outOfBorders(this.direction)) {
       console.log('outOfBorders');
       this.direction = null;
-      if (!this.outOfBorders(alternative)) {
+      if (!this.outOfBorders(alternative) && !this.willCollide(alternative)) {
         this.direction = alternative;
       }
     }
