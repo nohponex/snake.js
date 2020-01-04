@@ -1,58 +1,61 @@
 <!doctype html>
-<!--
-Snake game
-Created by NohponeX, 2013
--->
 <html>
   <head>
     <meta charset="utf-8">
-    <title>snake game created with HTML5 canvas</title>
+    <title>snake.js (Beta) - Game created with HTML5 canvas</title>
     <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
-    <style>
-      body {
-        background-color: #E3E8E1;
-      }
-      body, a, a:visited{
-        color:#AA7880;
-      }
-      div.canvas_container {
-        margin-left: auto;
-        margin-right: auto;
-        width: 500px;
-      }
-      canvas {
-        background-color: #C6D4C1;
-      }
-      div.canvas_container h4{
-        margin-top:3px;
-        text-align:right;
-        font-size:12px;
-
-      }
-    </style>
+    <link type="text/css" rel="stylesheet" media="all" href="style.css">
   </head>
   <body>
-    <a href="https://github.com/NohponeX/snake.js"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+    <a href="https://github.com/NohponeX/snake.js" target="_blank">
+      <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+    </a>
     <div class="canvas_container">
-      <canvas id="canvas" width="495" height="500">
+      <canvas id="canvas">
         Canvas not available
       </canvas>
     </div>
-    <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.en_US">
-      <img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png" />
-    </a>
-    <br />
-    <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">Snake </span>
-    by
-    <a xmlns:cc="http://creativecommons.org/ns#" href="http://www.nohponex.gr" property="cc:attributionName" rel="cc:attributionURL">NohponeX</a>
-    is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.en_US">Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License</a>.<br />Based on a work at <a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/NohponeX/snake" rel="dct:source">https://github.com/NohponeX/snake</a>
+    <div id="controls">
+      <div>
+        <h2>Controls:</h2>
+        <ul>
+          <li>
+            <span>
+              <kbd>&uarr;</kbd><kbd>&larr;</kbd><kbd>&darr;</kbd><kbd>&rarr;</kbd>
+            </span>
+            keys OR
+            <span>
+              <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>
+            </span>
+            keys to move
+          </li>
+          <li><kbd>p</kbd> to pause/resume</li>
+          <li><kbd>Enter &#9166;</kbd> to start new</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Food types:</h3>
+        <ul id="foods">
+          <li class="passive"><span></span> is food</li>
+          <li class="hostile"><span></span> is hostile (can kill you!)</li>
+          <li class="life"><span></span> is life</li>
+        </ul>
+      </div>
+    </div>
+    <footer>
+      Copyright &copy; 2015&nbsp;
+      <a href="https://nohponex.gr" target="_blank">
+        Spafaridis Xenophon
+      </a>
+    </footer>
 
     <!-- build:remove -->
-    <script src="snake.js" type="text/javascript" ></script>
+    <script type="text/javascript" data-main="js/main" src="../bower_components/requirejs/require.js"></script>
     <!-- /build -->
     <!-- comments:uncomment-block html -->
     <!--
-      <script src="snake.min.js" type="text/javascript" ></script>
+      <script src="require.min.js" type="text/javascript" ></script>
+      <script src="optimized.js" type="text/javascript" ></script>
     -->
     <!-- endcomments -->
   </body>

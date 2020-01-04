@@ -1,3 +1,17 @@
 {
-    "preset": "google"
+    "preset": "google",
+    "disallowMultipleLineStrings": null,
+    "plugins": [
+        "jscs-jsdoc"
+    ],
+    "jsDoc": {
+        "checkAnnotations": "jsdoc3",
+        "checkTypes": "strictNativeCase",
+        "enforceExistence": "exceptExports",
+        "requireParamTypes": true,
+        "checkReturnTypes": true,
+        "requireReturnTypes": true,
+        "checkRedundantReturns": true,
+        "leadingUnderscoreAccess": "protected"
+    }
 }
